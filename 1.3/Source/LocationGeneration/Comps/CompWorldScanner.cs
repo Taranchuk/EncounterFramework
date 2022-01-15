@@ -16,6 +16,7 @@ namespace LocationGeneration
 		public StatDef scanSpeedStat;
 		public float scanFindMtbDays;
 		public float scanFindGuaranteedDays;
+		public JobDef scanJob;
 		public CompProperties_WorldScanner()
 		{
 			compClass = typeof(CompWorldScanner);

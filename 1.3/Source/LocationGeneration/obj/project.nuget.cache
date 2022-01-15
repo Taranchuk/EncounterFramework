@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "W5cyRL+ED+ossPPQSzgylUazWWfQ9DQNGXOwlGkcUA6SrKXy/HPOPDvOpoUM2EXsNHt9Twckbo5hbwwVPSVPdA==",
+  "dgSpecHash": "6YEgTC8K2S/EkYoDQELlvp9GdFmSu0/OmjKbZvOOKFIgSrto1RHzo824IB7DlaFT7WPOKPOoA1ajgWHaQR0C9Q==",
   "success": true,
-  "projectFilePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\DungeoneeringFramework\\1.3\\Source\\LocationGeneration\\LocationGeneration.csproj",
+  "projectFilePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\EncounterFramework\\1.3\\Source\\LocationGeneration\\LocationGeneration.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Vova\\.nuget\\packages\\krafs.rimworld.ref\\1.3.3209-beta\\krafs.rimworld.ref.1.3.3209-beta.nupkg.sha512",
     "C:\\Users\\Vova\\.nuget\\packages\\lib.harmony\\2.1.1\\lib.harmony.2.1.1.nupkg.sha512"

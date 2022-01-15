@@ -6,11 +6,6 @@ using Verse;
 
 namespace LocationGeneration
 {
-    [DefOf]
-    public static class LGDefOf
-    {
-        public static JobDef DF_UseWorldScanner;
-    }
 	public class LocationDef : Def
 	{
 		public FactionDef factionBase;

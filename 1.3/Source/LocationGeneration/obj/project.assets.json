@@ -503,11 +503,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\DungeoneeringFramework\\1.3\\Source\\LocationGeneration\\LocationGeneration.csproj",
+      "projectUniqueName": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\EncounterFramework\\1.3\\Source\\LocationGeneration\\LocationGeneration.csproj",
       "projectName": "LocationGeneration",
-      "projectPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\DungeoneeringFramework\\1.3\\Source\\LocationGeneration\\LocationGeneration.csproj",
+      "projectPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\EncounterFramework\\1.3\\Source\\LocationGeneration\\LocationGeneration.csproj",
       "packagesPath": "C:\\Users\\Vova\\.nuget\\packages\\",
-      "outputPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\DungeoneeringFramework\\1.3\\Source\\LocationGeneration\\obj\\",
+      "outputPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\EncounterFramework\\1.3\\Source\\LocationGeneration\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "configFilePaths": [

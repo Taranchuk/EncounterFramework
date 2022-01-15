@@ -61,7 +61,7 @@ namespace LocationGeneration
 
         public override Job JobOnThing(Pawn pawn, Thing t, bool forced = false)
         {
-			return JobMaker.MakeJob(LGDefOf.DF_UseWorldScanner, t, 1500, checkOverrideOnExpiry: true);
+			return JobMaker.MakeJob(t.TryGetComp<CompWorldScanner>().Props.scanJob ?? DefDatabase<JobDef>.GetNamed("DF_UseWorldScanner"), t, 1500, checkOverrideOnExpiry: true);
         }
     }
 }

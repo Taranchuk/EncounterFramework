@@ -42,13 +42,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlueprintUtility.cs" />
-    <Compile Include="CompLootContainer.cs" />
-    <Compile Include="CompWorldScanner.cs" />
-    <Compile Include="DebugActions.cs" />
-    <Compile Include="Dialog_NameBlueprint.cs" />
-    <Compile Include="Dialog_SaveEverything.cs" />
+    <Compile Include="Comps\CompLootContainer.cs" />
+    <Compile Include="Comps\CompWorldScanner.cs" />
+    <Compile Include="HarmonyPatches\CaravanVisitPatch.cs" />
+    <Compile Include="HarmonyPatches\CaravanVisitSitePatch.cs" />
+    <Compile Include="HarmonyPatches\GenerateMapPatch.cs" />
+    <Compile Include="HarmonyPatches\GiveShortHash_Patch.cs" />
+    <Compile Include="LocationGenerationMod.cs" />
+    <Compile Include="HarmonyPatches\Patch_SettlementDefeatUtility_IsDefeated.cs" />
+    <Compile Include="HarmonyPatches\Patch_TryFindSpawnCell.cs" />
+    <Compile Include="HarmonyPatches\VisitSettlementFloat.cs" />
+    <Compile Include="UI\DebugActions.cs" />
+    <Compile Include="UI\Dialog_NameBlueprint.cs" />
+    <Compile Include="UI\Dialog_SaveEverything.cs" />
     <Compile Include="GenStep_LocationGeneration.cs" />
-    <Compile Include="JobDriver_UseWorldScanner.cs" />
+    <Compile Include="Jobs\JobDriver_UseWorldScanner.cs" />
     <Compile Include="LocationData.cs" />
     <Compile Include="LootGenerator.cs" />
     <Compile Include="LootOption.cs" />
@@ -60,10 +68,10 @@
     <Compile Include="LocationDef.cs" />
     <Compile Include="MapComponentGeneration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettlementBase_Patch.cs" />
+    <Compile Include="HarmonyPatches\GetOrGenerateMapPatch.cs" />
     <Compile Include="SettlementGeneration.cs" />
     <Compile Include="SettlementOptionModExtension.cs" />
-    <Compile Include="WorkGiver_PerformPingingOnWorldScanner.cs" />
+    <Compile Include="Jobs\WorkGiver_PerformPingingOnWorldScanner.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref">
@@ -73,5 +81,6 @@
       <Version>2.1.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
