@@ -69,6 +69,7 @@ namespace EncounterFramework
 					if (Widgets.ButtonText(rect, "EF.Select".Translate()))
 					{
 						this.parent.curPawnInfo.pawn = pawn;
+						this.parent.curWaveInfo.pawnOptions.Add(this.parent.curPawnInfo);
 						SoundDefOf.Click.PlayOneShotOnCamera();
 						this.Close();
 					}

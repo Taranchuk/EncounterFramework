@@ -84,8 +84,9 @@ namespace EncounterFramework
 	public class Window_MakePawnTemplate : Window_WaveDesigner_Options
 	{
         public List<ThingDef> allRaces = new List<ThingDef>();
-		public HashSet<string> allApparelTags = new HashSet<string>();
-		public HashSet<string> allWeaponTags = new HashSet<string>();
+        public HashSet<string> allTechHediffTags = new HashSet<string>();
+        public HashSet<string> allApparelTags = new HashSet<string>();
+        public HashSet<string> allWeaponTags = new HashSet<string>();
 
         public List<HediffDef> allHediffs = new List<HediffDef>();
         public List<ThingDef> allTechHediffs = new List<ThingDef>();
@@ -100,8 +101,9 @@ namespace EncounterFramework
             allTechHediffs = DefDatabase<ThingDef>.AllDefs.Where(x => x.isTechHediff).ToList();
             allApparels = DefDatabase<ThingDef>.AllDefs.Where(x => x.apparel?.tags != null).ToList();
             allWeapons = DefDatabase<ThingDef>.AllDefs.Where(x => x.weaponTags != null).ToList();
+            allTechHediffTags =  allTechHediffs.Where(x => x.techHediffsTags != null).SelectMany(x => x.techHediffsTags).ToHashSet();
             allApparelTags = allApparels.SelectMany(x => x.apparel.tags).ToHashSet();
-			allWeaponTags = allWeapons.SelectMany(x => x.weaponTags).ToHashSet();
+            allWeaponTags = allWeapons.SelectMany(x => x.weaponTags).ToHashSet();
 		}
 
 		public void SetRace(ThingDef race)
@@ -120,12 +122,15 @@ namespace EncounterFramework
                     break;
                 }
             }
-            parent.curPawnInfo.pawnKindDef = new PawnKindDef
+            parent.curPawnInfo = new PawnInfo
             {
-                race = race,
-                defName = defName,
-                label = race.label,
-                apparelIgnoreSeasons = false, 
+                pawnKindDef = new PawnKindDef
+                {
+                    race = race,
+                    defName = defName,
+                    label = race.label,
+                    apparelIgnoreSeasons = false,
+                }
             };
             var otherPawnKind = DefDatabase<PawnKindDef>.AllDefs.FirstOrDefault(x => x.race == race);
             parent.curPawnInfo.pawnKindDef.lifeStages = otherPawnKind.lifeStages;
@@ -149,29 +154,35 @@ namespace EncounterFramework
 
 		public override Vector2 InitialSize => new Vector2(620f, 500f);
 		private static readonly Texture2D Minus = ContentFinder<Texture2D>.Get("UI/Buttons/Minus");
-		public const float LineHeight = 24f;
-		public const float FirstColumnWidth = 150;
-		public const float SecondColumnWidth = 200;
+        public float prevHeight;
+        public Vector2 scrollPosition;
 		public override void DoWindowContents(Rect inRect)
         {
             var pos = new Vector2(inRect.x, inRect.y);
-            var pawnTemplateRect = new Rect(FirstColumnWidth + SecondColumnWidth + 20, pos.y, SecondColumnWidth, SecondColumnWidth);
+            var totalRect = new Rect(pos.x, pos.y, inRect.width - 16, prevHeight);
+            var viewRect = new Rect(inRect.x, inRect.y, inRect.width, inRect.height - 50);
+            Widgets.BeginScrollView(viewRect, ref scrollPosition, totalRect);
+
+            var pawnTemplateRect = new Rect(UIUtils.FirstColumnWidth + UIUtils.SecondColumnWidth + 20, pos.y, UIUtils.SecondColumnWidth - 20, UIUtils.SecondColumnWidth - 20);
             Widgets.DrawMenuSection(pawnTemplateRect);
-            pawnTemplateRect = DrawPawnPortrait(pawnTemplateRect, parent.curPawnInfo.examplePawn);
-            var generatePawnTemplate = new Rect(pawnTemplateRect.x, pawnTemplateRect.yMax + 10, SecondColumnWidth, LineHeight);
+            if (parent.curPawnInfo.examplePawn != null)
+            {
+                UIUtils.DrawPawnPortrait(pawnTemplateRect, parent.curPawnInfo.examplePawn);
+            }
+            var generatePawnTemplate = new Rect(pawnTemplateRect.x, pawnTemplateRect.yMax + 10, pawnTemplateRect.width, UIUtils.LineHeight);
             if (Widgets.ButtonText(generatePawnTemplate, "EF.GeneratePawnTemplate".Translate()))
             {
                 parent.curPawnInfo.examplePawn = parent.curPawnInfo.GeneratePawn();
             }
 
-            var pawnKindNameRect = new Rect(pos.x, pos.y, FirstColumnWidth, LineHeight);
+            var pawnKindNameRect = new Rect(pos.x, pos.y, UIUtils.FirstColumnWidth, UIUtils.LineHeight);
             Widgets.Label(pawnKindNameRect, "EF.TemplateName".Translate());
-            var pawnKindNameAreaRect = new Rect(pawnKindNameRect.xMax, inRect.y, SecondColumnWidth, LineHeight);
+            var pawnKindNameAreaRect = new Rect(pawnKindNameRect.xMax, inRect.y, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
             parent.curPawnInfo.pawnKindDef.label = Widgets.TextArea(pawnKindNameAreaRect, parent.curPawnInfo.pawnKindDef.label);
 
-            var selectRaceRect = new Rect(pos.x, pawnKindNameRect.yMax + 5, FirstColumnWidth, LineHeight);
+            var selectRaceRect = new Rect(pos.x, pawnKindNameRect.yMax + 5, UIUtils.FirstColumnWidth, UIUtils.LineHeight);
             Widgets.Label(selectRaceRect, "EF.SelectRace".Translate());
-            var selectRaceFloatMenu = new Rect(selectRaceRect.xMax, selectRaceRect.y, SecondColumnWidth, LineHeight);
+            var selectRaceFloatMenu = new Rect(selectRaceRect.xMax, selectRaceRect.y, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
             if (Widgets.ButtonText(selectRaceFloatMenu, parent.curPawnInfo.pawnKindDef.race.LabelCap))
             {
                 Find.WindowStack.Add(new Window_SelectRace(this, allRaces));
@@ -182,22 +193,22 @@ namespace EncounterFramework
                 pos = DrawSelectionOptions<ThingDef>(pos, "EF.RequiredImplants".Translate(), new Func<ThingDef, string>(x => x.LabelCap),
                     allTechHediffs, parent.curPawnInfo.pawnKindDef.techHediffsRequired);
                 
-                var techHediffMoneyRect = new Rect(pos.x, pos.y, FirstColumnWidth, LineHeight);
+                var techHediffMoneyRect = new Rect(pos.x, pos.y, UIUtils.FirstColumnWidth, UIUtils.LineHeight);
                 Widgets.Label(techHediffMoneyRect, "EF.SetImplantBudget".Translate());
-                var techHediffMoneyIntRangeRect = new Rect(techHediffMoneyRect.xMax, pos.y, SecondColumnWidth, LineHeight);
+                var techHediffMoneyIntRangeRect = new Rect(techHediffMoneyRect.xMax, pos.y, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
                 Widgets.FloatRange(techHediffMoneyIntRangeRect, techHediffMoneyIntRangeRect.GetHashCode(), ref parent.curPawnInfo.pawnKindDef.techHediffsMoney, 0, 9999);
                 pos.y = techHediffMoneyIntRangeRect.yMax + 5;
 
                 pos = DrawSelectionOptions<string>(pos, "EF.AddImplantTags".Translate(), new Func<string, string>(x => x),
-                    allApparelTags.Except(parent.curPawnInfo.pawnKindDef.techHediffsTags).OrderBy(x => x).ToList(),
-                    parent.curPawnInfo.pawnKindDef.apparelTags);
+                    allTechHediffTags.Except(parent.curPawnInfo.pawnKindDef.techHediffsTags).OrderBy(x => x).ToList(),
+                    parent.curPawnInfo.pawnKindDef.techHediffsTags);
 
                 pos = DrawSelectionOptions<ThingDef>(pos, "EF.RequiredApparels".Translate(), new Func<ThingDef, string>(x => x.LabelCap), 
                     allApparels, parent.curPawnInfo.pawnKindDef.apparelRequired);
 
-                var apparelMoneyRect = new Rect(pos.x, pos.y, FirstColumnWidth, LineHeight);
+                var apparelMoneyRect = new Rect(pos.x, pos.y, UIUtils.FirstColumnWidth, UIUtils.LineHeight);
                 Widgets.Label(apparelMoneyRect, "EF.SetApparelBudget".Translate());
-                var apparelMoneyIntRangeRect = new Rect(apparelMoneyRect.xMax, pos.y, SecondColumnWidth, LineHeight);
+                var apparelMoneyIntRangeRect = new Rect(apparelMoneyRect.xMax, pos.y, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
                 Widgets.FloatRange(apparelMoneyIntRangeRect, apparelMoneyIntRangeRect.GetHashCode(), ref parent.curPawnInfo.pawnKindDef.apparelMoney, 0, 9999);
                 pos.y = apparelMoneyIntRangeRect.yMax + 5;
                 
@@ -209,9 +220,9 @@ namespace EncounterFramework
             {
                 pos = DrawSelectionOptions<ThingDef>(pos, "EF.RequiredWeapons".Translate(), new Func<ThingDef, string>(x => x.LabelCap), allWeapons, parent.curPawnInfo.requiredWeapons);
 
-                var weaponMoneyRect = new Rect(pos.x, pos.y, FirstColumnWidth, LineHeight);
+                var weaponMoneyRect = new Rect(pos.x, pos.y, UIUtils.FirstColumnWidth, UIUtils.LineHeight);
                 Widgets.Label(weaponMoneyRect, "EF.SetWeaponBudget".Translate());
-                var weaponMoneyIntRangeRect = new Rect(weaponMoneyRect.xMax, pos.y, SecondColumnWidth, LineHeight);
+                var weaponMoneyIntRangeRect = new Rect(weaponMoneyRect.xMax, pos.y, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
                 Widgets.FloatRange(weaponMoneyIntRangeRect, weaponMoneyIntRangeRect.GetHashCode(), ref parent.curPawnInfo.pawnKindDef.weaponMoney, 0, 9999);
                 pos.y = weaponMoneyIntRangeRect.yMax + 5;
 
@@ -219,67 +230,56 @@ namespace EncounterFramework
                     allWeaponTags.Except(parent.curPawnInfo.pawnKindDef.weaponTags).OrderBy(x => x).ToList(),
                     parent.curPawnInfo.pawnKindDef.weaponTags);
             }
+
+            prevHeight = pos.y - inRect.y;
+            Widgets.EndScrollView();
+
+            var cancelButtonRect = new Rect(inRect.x + 30, inRect.height - 30, 200, 31);
+            if (Widgets.ButtonText(cancelButtonRect, "Cancel".Translate()))
+            {
+                Close();
+            }
+
+            var confirmButtonRect = new Rect(inRect.width - 30 - 200, cancelButtonRect.y, cancelButtonRect.width, cancelButtonRect.height);
+            if (Widgets.ButtonText(confirmButtonRect, "Confirm".Translate()))
+            {
+                if (this.parent.curPawnInfo.examplePawn is null)
+                {
+                    this.parent.curPawnInfo.examplePawn = this.parent.curPawnInfo.GeneratePawn();
+                }
+                this.parent.curWaveInfo.pawnOptions.Add(this.parent.curPawnInfo);
+                Close();
+            }
         }
 
         private Vector2 DrawSelectionOptions<T>(Vector2 pos, string text, Func<T, string> labelGetter, List<T> options, List<T> toAdd, bool floatMenu = true)
         {
-            var addItemsRect = new Rect(pos.x, pos.y, FirstColumnWidth, LineHeight);
+            var addItemsRect = new Rect(pos.x, pos.y, UIUtils.FirstColumnWidth, UIUtils.LineHeight);
             Widgets.Label(addItemsRect, text);
-            var addFloatMenuRect = new Rect(addItemsRect.xMax, addItemsRect.y, SecondColumnWidth, LineHeight);
+            var addFloatMenuRect = new Rect(addItemsRect.xMax, addItemsRect.y, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
             if (Widgets.ButtonText(addFloatMenuRect, "Add".Translate().CapitalizeFirst()))
             {
                 var window = new Window_AdvancedFloatMenu<T>(this, options, labelGetter, delegate (T opt)
                 {
                     toAdd.Add(opt);
                 });
+                Find.WindowStack.Add(window);
             }
             T toRemove = default;
             pos.y = addFloatMenuRect.yMax + 5;
             foreach (var option in toAdd)
             {
-                var rect = new Rect(addFloatMenuRect.x, pos.y, SecondColumnWidth - LineHeight, LineHeight);
+                var rect = new Rect(addFloatMenuRect.x, pos.y, UIUtils.SecondColumnWidth - UIUtils.LineHeight, UIUtils.LineHeight);
                 Widgets.Label(rect, labelGetter(option));
-                var minusRect = new Rect(rect.xMax, pos.y, LineHeight, LineHeight);
+                var minusRect = new Rect(rect.xMax, pos.y, UIUtils.LineHeight, UIUtils.LineHeight);
                 if (Widgets.ButtonImage(minusRect, Minus))
                 {
                     toRemove = option;
                 }
-                pos.y += LineHeight + 5;
+                pos.y += UIUtils.LineHeight + 5;
             }
             toAdd.Remove(toRemove);
             return pos;
-        }
-
-        private Rect DrawPawnPortrait(Rect pawnTemplateRect, Pawn pawn)
-        {
-            if (pawn != null)
-            {
-                var pawnSize = new Vector2(SecondColumnWidth, SecondColumnWidth);
-                var oldValue = Prefs.HatsOnlyOnMap;
-                Prefs.HatsOnlyOnMap = false;
-                PortraitsCache.SetDirty(pawn);
-                GUI.DrawTexture(pawnTemplateRect, PortraitsCache.Get(pawn, pawnSize, Rot4.South));
-                Prefs.HatsOnlyOnMap = oldValue;
-                if (pawn.equipment?.Primary != null)
-                {
-                    var weaponSize = pawnSize.x / 2f;
-                    var pawnRect = new Rect(pawnTemplateRect.x + (weaponSize / 2f), pawnTemplateRect.y + (weaponSize / 2f) + 20f, weaponSize, weaponSize);
-                    var angle = pawn.equipment.Primary.def.equippedAngleOffset + 50;
-                    Matrix4x4 matrix = Matrix4x4.identity;
-                    if (angle != 0f)
-                    {
-                        matrix = GUI.matrix;
-                        UI.RotateAroundPivot(angle, pawnRect.center);
-                    }
-                    GUI.DrawTexture(pawnRect, pawn.equipment.Primary.Graphic.MatAt(Rot4.South).mainTexture);
-                    if (angle != 0f)
-                    {
-                        GUI.matrix = matrix;
-                    }
-                }
-            }
-
-            return pawnTemplateRect;
         }
     }
 }

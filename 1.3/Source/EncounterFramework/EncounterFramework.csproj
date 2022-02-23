@@ -45,6 +45,7 @@
     <Compile Include="Comps\CompLootContainer.cs" />
     <Compile Include="Comps\CompWaveGenerator.cs" />
     <Compile Include="Comps\CompWorldScanner.cs" />
+    <Compile Include="Waves\UIUtils.cs" />
     <Compile Include="Waves\Window_MakePawnTemplate.cs" />
     <Compile Include="Waves\Window_NewWaveName.cs" />
     <Compile Include="Waves\Window_AdvancedFloatMenu.cs" />

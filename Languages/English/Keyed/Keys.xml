@@ -22,4 +22,5 @@
 	<EF.RequiredImplants>Required implants</EF.RequiredImplants>
 	<EF.SetImplantBudget>Set implant budget</EF.SetImplantBudget>
 	<EF.AddImplantTags>Add implant tags</EF.AddImplantTags>
+	<EF.WaveRemoveConfirmation>Are you sure that you want to delete {0}?</EF.WaveRemoveConfirmation>
 </LanguageData>

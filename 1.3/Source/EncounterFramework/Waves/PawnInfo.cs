@@ -13,7 +13,6 @@ namespace EncounterFramework
 		public PawnKindDef pawnKindDef;
         public Pawn examplePawn;
         public List<ThingDef> requiredWeapons = new List<ThingDef>();
-
         public Pawn GeneratePawn()
         {
             Log.Message(pawnKindDef + " - " + string.Join(", ", pawnKindDef.apparelRequired));
@@ -36,13 +35,4 @@ namespace EncounterFramework
             return pawn;
         }
 	}
-
-    [HarmonyPatch(typeof(Pawn_ApparelTracker), "Wear")]
-    public static class ApparelTracker_Wear
-    {
-        public static void Postfix(Apparel newApparel, Pawn_ApparelTracker __instance)
-        {
-            Log.Message(__instance.pawn + " is wearing " + newApparel);
-        }
-    }
 }

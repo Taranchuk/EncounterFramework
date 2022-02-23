@@ -55,23 +55,23 @@ namespace EncounterFramework
 				float num = 0f;
 				foreach (T option in thingDefs.OrderBy(x => labelGetter(x)))
 				{
-					Rect iconRect = new Rect(0f, num, 24, 32);
+					Vector2 pos = new Vector2(0, num);
 					if (option is Def def)
                     {
-						Widgets.InfoCardButton(iconRect, def);
-						iconRect.x += 24;
+						Widgets.InfoCardButton(new Rect(0f, num, 24, 32), def);
+						pos.x += 24;
 					}
 					else if (option is Thing thing)
                     {
-						Widgets.InfoCardButton(iconRect.x, iconRect.y, thing);
-						iconRect.x += 24;
-						Widgets.ThingIcon(iconRect, thing);
+						Widgets.InfoCardButton(pos.x, pos.y, thing);
+						pos.x += 24;
+						Widgets.ThingIcon(new Rect(pos.x, num, 24, 32), thing);
 					}
-					Rect rect = new Rect(iconRect.xMax + 5, num, viewRect.width * 0.7f, 32f);
+					Rect rect = new Rect(pos.x, num, viewRect.width * 0.7f, 32f);
 					Text.Anchor = TextAnchor.MiddleLeft;
 					Widgets.Label(rect, labelGetter( option).CapitalizeFirst());
 					Text.Anchor = TextAnchor.UpperLeft;
-					rect.x = rect.xMax + 10;
+					rect.x = viewRect.width - 120;
 					rect.width = 100;
 					if (Widgets.ButtonText(rect, "EF.Select".Translate()))
 					{
