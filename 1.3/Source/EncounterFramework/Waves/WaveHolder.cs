@@ -5,10 +5,10 @@ namespace EncounterFramework
 {
     public class WaveHolder : IExposable
     {
-		public List<WaveInfo> waves = new List<WaveInfo>();
+		public List<Wave> waves = new List<Wave>();
 		public WaveHolder()
         {
-			waves = new List<WaveInfo>();
+			waves = new List<Wave>();
         }
         public void ExposeData()
         {

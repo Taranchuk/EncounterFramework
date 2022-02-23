@@ -8,7 +8,7 @@ using Verse;
 namespace EncounterFramework
 {
 
-    public class PawnInfo : IExposable
+    public class PawnData : IExposable
     {
 		public Pawn pawn;
 		public PawnKindSaveable pawnKindDef;
@@ -21,25 +21,32 @@ namespace EncounterFramework
             Scribe_Deep.Look(ref examplePawn, "examplePawn");
             Scribe_Collections.Look(ref requiredWeapons, "requiredWeapons", LookMode.Def);
         }
-
-        public Pawn GeneratePawn()
+        public Pawn GetOrGeneratePawn(Faction faction)
         {
+            if (pawn != null)
+            {
+                if (faction != null && pawn.Faction != faction)
+                {
+                    pawn.SetFaction(faction);
+                }
+                return pawn;
+            }
             pawnKindDef.apparelTags?.Add("DummyJustToOverride");
-            var pawn = PawnGenerator.GeneratePawn(pawnKindDef);
+            var newPawn = PawnGenerator.GeneratePawn(pawnKindDef, faction);
             pawnKindDef.apparelTags?.Remove("DummyJustToOverride");
             if (requiredWeapons != null)
             {
                 foreach (var weapon in requiredWeapons)
                 {
                     var thing = ThingMaker.MakeThing(weapon, GenStuff.DefaultStuffFor(weapon)) as ThingWithComps;
-                    if (thing.def.equipmentType == EquipmentType.Primary && pawn.equipment.Primary != null)
+                    if (thing.def.equipmentType == EquipmentType.Primary && newPawn.equipment.Primary != null)
                     {
-                        pawn.equipment.Primary.Destroy();
+                        newPawn.equipment.Primary.Destroy();
                     }
-                    pawn.equipment.AddEquipment(thing);
+                    newPawn.equipment.AddEquipment(thing);
                 }
             }
-            return pawn;
+            return newPawn;
         }
 	}
 }

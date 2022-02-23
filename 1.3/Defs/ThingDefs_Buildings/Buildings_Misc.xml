@@ -18,6 +18,7 @@
     <useHitPoints>False</useHitPoints>
     <designationCategory>Misc</designationCategory>
     <passability>Standable</passability>
+	<tickerType>Normal</tickerType>
     <building>
       <sowTag>SupportPlantsOnly</sowTag>
       <canPlaceOverImpassablePlant>false</canPlaceOverImpassablePlant>

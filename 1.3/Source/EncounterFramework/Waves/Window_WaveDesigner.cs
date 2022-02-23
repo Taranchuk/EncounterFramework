@@ -9,23 +9,24 @@ using RimWorld;
 
 namespace EncounterFramework
 {
-
     [HotSwappableAttribute]
 	[StaticConstructorOnStartup]
 	public class Window_WaveDesigner : Window
     {
 		public WaveHolder waveHolder;
 		public override Vector2 InitialSize => new Vector2(800, 600);
-		public WaveInfo curWaveInfo;
-		public PawnInfo curPawnInfo;
-		public Window_WaveDesigner()
+		public Wave curWaveInfo;
+		public PawnData curPawnInfo;
+		private CompWaveGenerator compWaveGenerator;
+		public Window_WaveDesigner(CompWaveGenerator compWaveGenerator)
         {
 			this.doCloseX = true;
-			waveHolder = new WaveHolder();
+			this.compWaveGenerator = compWaveGenerator;
+			waveHolder = this.compWaveGenerator.waveHolder;
 		}
-		private float prevHeight;
 
-		WaveInfo waveToRemove = null;
+		private float prevHeight;
+		Wave waveToRemove = null;
 		public override void DoWindowContents(Rect inRect)
         {
 			Text.Font = GameFont.Small;
@@ -82,7 +83,7 @@ namespace EncounterFramework
 			var createNewWaveRect = new Rect(inRect.x + 5f, waveSection.yMax + 15, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
 			if (Widgets.ButtonText(createNewWaveRect, "EF.CreateNewWave".Translate()))
 			{
-				var wave = new WaveInfo();
+				var wave = new Wave();
 				wave.name = "EF.NewWave".Translate(waveHolder.waves.Count + 1);
 				var window = new Window_NewWaveName(this, wave);
 				Find.WindowStack.Add(window);
@@ -148,7 +149,7 @@ namespace EncounterFramework
 				Widgets.DrawHighlightIfMouseover(createPawnOptionRect);
 				if (Widgets.ButtonInvisible(createPawnOptionRect))
                 {
-					curPawnInfo = new PawnInfo();
+					curPawnInfo = new PawnData();
 					var window = new Window_ChoosePawnOptions(this);
 					Find.WindowStack.Add(window);
 				}
@@ -179,6 +180,7 @@ namespace EncounterFramework
 			var closeButtonRect = new Rect(exportWaveSettingsRect.xMax + 50, cancelButtonRect.y, cancelButtonRect.width, cancelButtonRect.height);
 			if (Widgets.ButtonText(closeButtonRect, "Close".Translate()))
 			{
+				this.compWaveGenerator.waveHolder = waveHolder;
 				this.Close();
 			}
 		}

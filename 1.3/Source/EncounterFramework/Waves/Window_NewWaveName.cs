@@ -5,10 +5,10 @@ namespace EncounterFramework
     public class Window_NewWaveName : Dialog_Rename
 	{
 		private Window_WaveDesigner waveDesigner;
-		private WaveInfo waveInfo;
-		public Window_NewWaveName(Window_WaveDesigner waveDesigner, WaveInfo wave)
+		private Wave wave;
+		public Window_NewWaveName(Window_WaveDesigner waveDesigner, Wave wave)
 		{
-			waveInfo = wave;
+			this.wave = wave;
 			curName = wave.name;
 			this.waveDesigner = waveDesigner;
 		}
@@ -22,8 +22,8 @@ namespace EncounterFramework
 		{
 			if (!name.NullOrEmpty())
 			{
-				waveInfo.SetName(name);
-				waveDesigner.waveHolder.waves.Add(waveInfo);
+				wave.name = name;
+				waveDesigner.waveHolder.waves.Add(wave);
 			}
 		}
 	}

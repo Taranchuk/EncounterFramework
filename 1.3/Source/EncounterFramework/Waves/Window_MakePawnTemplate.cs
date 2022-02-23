@@ -53,18 +53,22 @@ namespace EncounterFramework
                     break;
                 }
             }
-            parent.curPawnInfo = new PawnInfo
+            var newPawnKind = new PawnKindSaveable
             {
-                pawnKindDef = new PawnKindSaveable
-                {
-                    race = race,
-                    defName = defName,
-                    label = race.label,
-                    apparelIgnoreSeasons = false,
-                }
+                race = race,
+                defName = defName,
+                label = race.label,
+                apparelIgnoreSeasons = false,
             };
 
-            var otherPawnKind = DefDatabase<PawnKindDef>.AllDefs.FirstOrDefault(x => x.race == race);
+            DefDatabase<PawnKindDef>.Add(newPawnKind);
+
+            parent.curPawnInfo = new PawnData
+            {
+                pawnKindDef = newPawnKind
+            };
+
+            var otherPawnKind = DefDatabase<PawnKindDef>.AllDefs.FirstOrDefault(x => x != newPawnKind && x.race == race);
             parent.curPawnInfo.pawnKindDef.lifeStages = otherPawnKind.lifeStages;
 
             if (parent.curPawnInfo.pawnKindDef.RaceProps.Humanlike)
@@ -104,7 +108,7 @@ namespace EncounterFramework
             var generatePawnTemplate = new Rect(pawnTemplateRect.x, pawnTemplateRect.yMax + 10, pawnTemplateRect.width, UIUtils.LineHeight);
             if (Widgets.ButtonText(generatePawnTemplate, "EF.GeneratePawnTemplate".Translate()))
             {
-                parent.curPawnInfo.examplePawn = parent.curPawnInfo.GeneratePawn();
+                parent.curPawnInfo.examplePawn = parent.curPawnInfo.GetOrGeneratePawn(null);
             }
 
             var pawnKindNameRect = new Rect(pos.x, pos.y, UIUtils.FirstColumnWidth, UIUtils.LineHeight);
@@ -177,7 +181,7 @@ namespace EncounterFramework
             {
                 if (this.parent.curPawnInfo.examplePawn is null)
                 {
-                    this.parent.curPawnInfo.examplePawn = this.parent.curPawnInfo.GeneratePawn();
+                    this.parent.curPawnInfo.examplePawn = this.parent.curPawnInfo.GetOrGeneratePawn(null);
                 }
                 this.parent.curWaveInfo.pawnOptions.Add(this.parent.curPawnInfo);
                 Close();

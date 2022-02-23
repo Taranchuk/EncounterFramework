@@ -45,6 +45,7 @@
     <Compile Include="Comps\CompLootContainer.cs" />
     <Compile Include="Comps\CompWaveGenerator.cs" />
     <Compile Include="Comps\CompWorldScanner.cs" />
+    <Compile Include="Comps\HotSwappableAttribute.cs" />
     <Compile Include="Waves\Dialog_SaveWaveSettings.cs" />
     <Compile Include="Waves\Dialog_WaveSettingsList.cs" />
     <Compile Include="Waves\IOUtils.cs" />
@@ -54,8 +55,8 @@
     <Compile Include="Waves\Window_MakePawnTemplate.cs" />
     <Compile Include="Waves\Window_NewWaveName.cs" />
     <Compile Include="Waves\Window_AdvancedFloatMenu.cs" />
-    <Compile Include="Waves\PawnInfo.cs" />
-    <Compile Include="Waves\WaveInfo.cs" />
+    <Compile Include="Waves\PawnData.cs" />
+    <Compile Include="Waves\Wave.cs" />
     <Compile Include="Waves\Window_ImportExistingPawn.cs" />
     <Compile Include="Waves\Window_ChoosePawnOptions.cs" />
     <Compile Include="Waves\Window_SelectRace.cs" />

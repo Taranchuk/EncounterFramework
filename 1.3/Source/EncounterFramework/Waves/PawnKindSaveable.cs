@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using RimWorld;
+using System.Linq;
 using Verse;
 
 namespace EncounterFramework
@@ -22,15 +23,14 @@ namespace EncounterFramework
             Scribe_Collections.Look(ref techHediffsTags, "techHediffsTags", LookMode.Value);
             Scribe_Collections.Look(ref techHediffsRequired, "techHediffsRequired", LookMode.Def);
             Scribe_Values.Look(ref techHediffsMoney, "techHediffsMoney");
-
+            if (DefDatabase<PawnKindDef>.GetNamedSilentFail(defName) is null)
+            {
+                DefDatabase<PawnKindDef>.Add(this);
+            }
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 var otherPawnKind = DefDatabase<PawnKindDef>.AllDefs.FirstOrDefault(x => x.race == race);
                 lifeStages = otherPawnKind.lifeStages;
-                if (DefDatabase<PawnKindDef>.GetNamedSilentFail(defName) is null)
-                {
-                    DefDatabase<PawnKindDef>.Add(this);
-                }
             }
         }
     }
