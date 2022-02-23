@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <EF.CreateNewWave>Create new wave</EF.CreateNewWave>
+  <EF.NewWave>Wave {0}</EF.NewWave>
+  <EF.AddPawn>Add Pawn</EF.AddPawn>
+	<EF.ImportExistingPawn>Import existing pawn</EF.ImportExistingPawn>
+	<EF.MakePawnTemplate>Make pawn template</EF.MakePawnTemplate>
+	<EF.Search>Search</EF.Search>
+	<EF.Select>Select</EF.Select>
+	<EF.IncludeAnimals>Include non humanlike pawns</EF.IncludeAnimals>
+	<EF.TemplateName>Template name: </EF.TemplateName>
+	<EF.SelectRace>Select race: </EF.SelectRace>
+	<EF.AddApparelTags>Add apparel tags</EF.AddApparelTags>
+	<EF.AddWeaponTags>Add weapon tags</EF.AddWeaponTags>
+	<EF.SetApparelBudget>Set apparel budget</EF.SetApparelBudget>
+	<EF.SetWeaponBudget>Set weapon budget</EF.SetWeaponBudget>
+	<EF.GeneratePawnTemplate>Generate pawn template</EF.GeneratePawnTemplate>
+	<EF.RequiredApparels>Required apparels</EF.RequiredApparels>
+	<EF.RequiredWeapons>Required weapons</EF.RequiredWeapons>
+	<EF.RequiredHediffs>Required hediffs</EF.RequiredHediffs>
+	<EF.RequiredImplants>Required implants</EF.RequiredImplants>
+	<EF.SetImplantBudget>Set implant budget</EF.SetImplantBudget>
+	<EF.AddImplantTags>Add implant tags</EF.AddImplantTags>
+</LanguageData>
