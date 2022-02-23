@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Verse;
 
 namespace EncounterFramework
 {
@@ -8,17 +9,26 @@ namespace EncounterFramework
         EdgeOfMap,
         Anywhere
     };
-    public class WaveInfo
+    public class WaveInfo : IExposable
     {
 		public string name;
 		public List<PawnInfo> pawnOptions;
         public int timeToSpawn;
-        public WaveSpawnOption option;
+        public WaveSpawnOption spawnOption;
 		public WaveInfo()
         {
 			this.pawnOptions = new List<PawnInfo>();
         }
-		public void SetName(string newName)
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref name, "name");
+            Scribe_Collections.Look(ref pawnOptions, "pawnOptions", LookMode.Deep);
+            Scribe_Values.Look(ref timeToSpawn, "timeToSpawn");
+            Scribe_Values.Look(ref spawnOption, "spawnOption");
+        }
+
+        public void SetName(string newName)
         {
 			name = newName;
         }

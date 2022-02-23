@@ -23,4 +23,11 @@
 	<EF.SetImplantBudget>Set implant budget</EF.SetImplantBudget>
 	<EF.AddImplantTags>Add implant tags</EF.AddImplantTags>
 	<EF.WaveRemoveConfirmation>Are you sure that you want to delete {0}?</EF.WaveRemoveConfirmation>
+	<EF.EdgeOfRoom>Edge of room</EF.EdgeOfRoom>
+	<EF.EdgeOfMap>Edge of map</EF.EdgeOfMap>
+	<EF.Anywhere>Anywhere</EF.Anywhere>
+	<EF.SelectSpawnMode>Select spawn mode:</EF.SelectSpawnMode>
+	<EF.TimeBeforeSpawn>Time before spawn: </EF.TimeBeforeSpawn>
+	<EF.ImportWaveSettings>Import wave settings</EF.ImportWaveSettings>
+	<EF.ExportWaveSettings>Export wave settings</EF.ExportWaveSettings>
 </LanguageData>

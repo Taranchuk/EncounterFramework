@@ -23,7 +23,7 @@ namespace EncounterFramework
 			if (!name.NullOrEmpty())
 			{
 				waveInfo.SetName(name);
-				waveDesigner.waves.Add(waveInfo);
+				waveDesigner.waveHolder.waves.Add(waveInfo);
 			}
 		}
 	}

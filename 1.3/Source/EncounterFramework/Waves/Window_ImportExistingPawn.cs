@@ -20,7 +20,7 @@ namespace EncounterFramework
 			doCloseX = true;
 			closeOnClickedOutside = false;
 			absorbInputAroundWindow = false;
-			allPawns = PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead;
+			allPawns = PawnsFinder.AllMapsWorldAndTemporary_AliveOrDead.Where(pawn => !parent.waveHolder.waves.Any(wave => wave.pawnOptions.Any(pawnOption => pawnOption.pawn == pawn))).ToList();
 			this.parent = parent;
 		}
 

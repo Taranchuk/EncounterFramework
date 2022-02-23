@@ -7,15 +7,23 @@ using Verse;
 
 namespace EncounterFramework
 {
-    public class PawnInfo
+
+    public class PawnInfo : IExposable
     {
 		public Pawn pawn;
-		public PawnKindDef pawnKindDef;
+		public PawnKindSaveable pawnKindDef;
         public Pawn examplePawn;
         public List<ThingDef> requiredWeapons = new List<ThingDef>();
+        public void ExposeData()
+        {
+            Scribe_Deep.Look(ref pawnKindDef, "pawnKindDef");
+            Scribe_Deep.Look(ref pawn, "pawn");
+            Scribe_Deep.Look(ref examplePawn, "examplePawn");
+            Scribe_Collections.Look(ref requiredWeapons, "requiredWeapons", LookMode.Def);
+        }
+
         public Pawn GeneratePawn()
         {
-            Log.Message(pawnKindDef + " - " + string.Join(", ", pawnKindDef.apparelRequired));
             pawnKindDef.apparelTags?.Add("DummyJustToOverride");
             var pawn = PawnGenerator.GeneratePawn(pawnKindDef);
             pawnKindDef.apparelTags?.Remove("DummyJustToOverride");
@@ -31,7 +39,6 @@ namespace EncounterFramework
                     pawn.equipment.AddEquipment(thing);
                 }
             }
-            Log.Message(pawnKindDef + " - " + string.Join(", ", pawn.apparel.WornApparel));
             return pawn;
         }
 	}

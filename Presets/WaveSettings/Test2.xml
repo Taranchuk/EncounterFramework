@@ -1,0 +1,1063 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WaveInfoData>
+	<waves>
+		<li>
+			<name>Wave 1</name>
+			<pawnOptions>
+				<li>
+					<pawn>
+						<def>Human</def>
+						<id>Human312</id>
+						<pos>(137, 0, 124)</pos>
+						<rot>1</rot>
+						<faction>Faction_11</faction>
+						<questTags IsNull="True" />
+						<kindDef>Colonist</kindDef>
+						<gender>Female</gender>
+						<name Class="NameTriple">
+							<first>Antonino</first>
+							<nick>Toni</nick>
+							<last>Cefalu</last>
+						</name>
+						<mindState>
+							<meleeThreat>null</meleeThreat>
+							<enemyTarget>null</enemyTarget>
+							<knownExploder>null</knownExploder>
+							<lastMannedThing>null</lastMannedThing>
+							<lastAttackedTarget>(0, 0, 0)</lastAttackedTarget>
+							<thinkData>
+								<keys />
+								<values />
+							</thinkData>
+							<lastJobTag>Idle</lastJobTag>
+							<nextApparelOptimizeTick>8519</nextApparelOptimizeTick>
+							<lastEngageTargetTick>-99999</lastEngageTargetTick>
+							<lastAttackTargetTick>-99999</lastAttackTargetTick>
+							<canFleeIndividual>True</canFleeIndividual>
+							<lastMeleeThreatHarmTick>-99999</lastMeleeThreatHarmTick>
+							<nextMoveOrderIsWait>False</nextMoveOrderIsWait>
+							<duty IsNull="True" />
+							<mentalStateHandler>
+								<curState IsNull="True" />
+							</mentalStateHandler>
+							<mentalBreaker />
+							<inspirationHandler>
+								<curState IsNull="True" />
+							</inspirationHandler>
+							<priorityWork>
+								<prioritizedCell>(-1000, -1000, -1000)</prioritizedCell>
+							</priorityWork>
+							<lastSelfTendTick>-99999</lastSelfTendTick>
+							<breachingTarget IsNull="True" />
+						</mindState>
+						<jobs>
+							<curJob>
+								<commTarget>null</commTarget>
+								<verbToUse>null</verbToUse>
+								<bill>null</bill>
+								<lord>null</lord>
+								<quest>null</quest>
+								<def>Wait_Wander</def>
+								<loadID>255</loadID>
+								<targetQueueA IsNull="True" />
+								<targetQueueB IsNull="True" />
+								<countQueue IsNull="True" />
+								<startTick>478</startTick>
+								<expiryInterval>148</expiryInterval>
+								<placedThings IsNull="True" />
+								<jobGiverThinkTree>Humanlike</jobGiverThinkTree>
+								<psyfocusTargetLast>-1</psyfocusTargetLast>
+								<ability>null</ability>
+								<lastJobGiverKey>710274788</lastJobGiverKey>
+							</curJob>
+							<curDriver Class="JobDriver_Wait">
+								<curToilIndex>0</curToilIndex>
+								<ticksLeftThisToil>-145</ticksLeftThisToil>
+								<curToilCompleteMode>Never</curToilCompleteMode>
+								<startTick>478</startTick>
+								<locomotionUrgencySameAs>null</locomotionUrgencySameAs>
+							</curDriver>
+							<jobQueue>
+								<jobs />
+							</jobQueue>
+							<formingCaravanTick>-1</formingCaravanTick>
+						</jobs>
+						<stances>
+							<staggerUntilTick>-1</staggerUntilTick>
+							<stunner>
+								<showStunMote>True</showStunMote>
+							</stunner>
+							<curStance Class="Stance_Mobile" />
+						</stances>
+						<verbTracker>
+							<verbs IsNull="True" />
+						</verbTracker>
+						<natives>
+							<verbTracker>
+								<verbs IsNull="True" />
+							</verbTracker>
+						</natives>
+						<meleeVerbs>
+							<curMeleeVerb>null</curMeleeVerb>
+							<terrainVerbs IsNull="True" />
+						</meleeVerbs>
+						<rotationTracker />
+						<pather>
+							<moving>False</moving>
+							<nextCell>(137, 0, 124)</nextCell>
+							<nextCellCostInitial>84</nextCellCostInitial>
+							<peMode>OnCell</peMode>
+							<cellsUntilClamor>9</cellsUntilClamor>
+							<lastMovedTick>623</lastMovedTick>
+						</pather>
+						<carryTracker>
+							<innerContainer>
+								<maxStacks>1</maxStacks>
+								<innerList />
+							</innerContainer>
+						</carryTracker>
+						<apparel>
+							<wornApparel>
+								<innerList>
+									<li>
+										<def>Apparel_CollarShirt</def>
+										<id>Apparel_CollarShirt313</id>
+										<health>130</health>
+										<stackCount>1</stackCount>
+										<stuff>Synthread</stuff>
+										<questTags IsNull="True" />
+										<quality>Normal</quality>
+										<sourcePrecept>null</sourcePrecept>
+										<everSeenByPlayer>True</everSeenByPlayer>
+									</li>
+									<li>
+										<def>Apparel_Pants</def>
+										<id>Apparel_Pants314</id>
+										<health>130</health>
+										<stackCount>1</stackCount>
+										<stuff>Synthread</stuff>
+										<questTags IsNull="True" />
+										<quality>Normal</quality>
+										<sourcePrecept>null</sourcePrecept>
+										<everSeenByPlayer>True</everSeenByPlayer>
+									</li>
+								</innerList>
+							</wornApparel>
+							<lockedApparel />
+							<lastApparelWearoutTick>250</lastApparelWearoutTick>
+						</apparel>
+						<story>
+							<childhood>Pickpocket61</childhood>
+							<adulthood>CriminalSurgeon99</adulthood>
+							<bodyType>Thin</bodyType>
+							<crownType>Average</crownType>
+							<headGraphicPath>Things/Pawn/Humanlike/Heads/Female/Female_Average_Wide</headGraphicPath>
+							<hairDef>Elisabeth</hairDef>
+							<hairColor>RGBA(0.760, 0.760, 0.760, 1.000)</hairColor>
+							<melanin>0.4104731</melanin>
+							<traits>
+								<allTraits>
+									<li>
+										<def>NaturalMood</def>
+										<degree>-1</degree>
+									</li>
+									<li>
+										<def>NightOwl</def>
+									</li>
+									<li>
+										<def>SlowLearner</def>
+									</li>
+								</allTraits>
+							</traits>
+							<birthLastName>Cefalu</birthLastName>
+							<favoriteColor>RGBA(0.753, 0.753, 0.753, 1.000)</favoriteColor>
+						</story>
+						<equipment>
+							<equipment>
+								<innerList />
+							</equipment>
+							<bondedWeapon>null</bondedWeapon>
+						</equipment>
+						<drafter>
+							<autoUndrafter />
+						</drafter>
+						<ageTracker>
+							<ageBiologicalTicks>221858701</ageBiologicalTicks>
+							<birthAbsTicks>-243085578</birthAbsTicks>
+							<growth>1</growth>
+							<nextGrowthCheckTick>9223372036854775807</nextGrowthCheckTick>
+							<ageReversalDemandedAtAgeTicks>223478078</ageReversalDemandedAtAgeTicks>
+						</ageTracker>
+						<healthTracker>
+							<hediffSet>
+								<hediffs>
+									<li Class="Hediff_Injury">
+										<loadID>21</loadID>
+										<def>Bite</def>
+										<ageTicks>623</ageTicks>
+										<part>
+											<body>Human</body>
+											<index>12</index>
+										</part>
+										<severity>5</severity>
+										<visible>True</visible>
+										<combatLogEntry>null</combatLogEntry>
+										<infectionChanceFactor>1</infectionChanceFactor>
+										<isPermanent>True</isPermanent>
+										<painCategory>MediumPain</painCategory>
+									</li>
+									<li Class="HediffWithComps">
+										<loadID>74</loadID>
+										<def>CryptosleepSickness</def>
+										<ageTicks>623</ageTicks>
+										<severity>1</severity>
+										<visible>True</visible>
+										<combatLogEntry>null</combatLogEntry>
+										<ticksToDisappear>9876</ticksToDisappear>
+									</li>
+								</hediffs>
+							</hediffSet>
+							<surgeryBills>
+								<bills />
+							</surgeryBills>
+							<immunity>
+								<imList />
+							</immunity>
+						</healthTracker>
+						<records>
+							<records>
+								<vals>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>640</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+								</vals>
+							</records>
+							<battleActive>null</battleActive>
+						</records>
+						<inventory>
+							<itemsNotForSale />
+							<unpackedCaravanItems />
+							<innerContainer>
+								<innerList />
+							</innerContainer>
+						</inventory>
+						<filth>
+							<carriedFilth />
+						</filth>
+						<roping>
+							<hitchingPostInt>null</hitchingPostInt>
+							<ropees />
+						</roping>
+						<needs>
+							<needs>
+								<li Class="Need_Mood">
+									<def>Mood</def>
+									<curLevel>0.5288</curLevel>
+									<thoughts>
+										<memories>
+											<memories>
+												<li Class="Thought_MemorySocial">
+													<def>CrashedTogether</def>
+													<sourcePrecept>null</sourcePrecept>
+													<otherPawn>null</otherPawn>
+													<age>600</age>
+													<opinionOffset>25</opinionOffset>
+												</li>
+												<li Class="Thought_MemorySocial">
+													<def>CrashedTogether</def>
+													<sourcePrecept>null</sourcePrecept>
+													<otherPawn>null</otherPawn>
+													<age>600</age>
+													<opinionOffset>25</opinionOffset>
+												</li>
+												<li>
+													<def>NewColonyOptimism</def>
+													<sourcePrecept>null</sourcePrecept>
+													<otherPawn>null</otherPawn>
+													<age>600</age>
+												</li>
+											</memories>
+										</memories>
+									</thoughts>
+									<recentMemory>
+										<lastLightTick>622</lastLightTick>
+										<lastOutdoorTick>538</lastOutdoorTick>
+									</recentMemory>
+								</li>
+								<li Class="Need_Food">
+									<def>Food</def>
+									<curLevel>0.784</curLevel>
+									<lastNonStarvingTick>538</lastNonStarvingTick>
+								</li>
+								<li Class="Need_Rest">
+									<def>Rest</def>
+									<curLevel>0.9504623</curLevel>
+								</li>
+								<li Class="Need_Joy">
+									<def>Joy</def>
+									<curLevel>0.5865995</curLevel>
+									<tolerances>
+										<vals>
+											<li>0</li>
+											<li>0</li>
+											<li>0</li>
+											<li>0</li>
+											<li>0</li>
+											<li>0</li>
+											<li>0</li>
+											<li>0</li>
+											<li>0</li>
+										</vals>
+									</tolerances>
+									<bored>
+										<vals>
+											<li>False</li>
+											<li>False</li>
+											<li>False</li>
+											<li>False</li>
+											<li>False</li>
+											<li>False</li>
+											<li>False</li>
+											<li>False</li>
+											<li>False</li>
+										</vals>
+									</bored>
+								</li>
+								<li Class="Need_Beauty">
+									<def>Beauty</def>
+									<curLevel>0.4904</curLevel>
+								</li>
+								<li Class="Need_Comfort">
+									<def>Comfort</def>
+									<curLevel>0.4904</curLevel>
+								</li>
+								<li Class="Need_Outdoors">
+									<def>Outdoors</def>
+									<curLevel>1</curLevel>
+								</li>
+								<li Class="Need_Indoors">
+									<def>Indoors</def>
+									<curLevel>1</curLevel>
+								</li>
+								<li Class="Need_Chemical_Any">
+									<def>DrugDesire</def>
+									<curLevel>0.5</curLevel>
+								</li>
+								<li Class="Need_RoomSize">
+									<def>RoomSize</def>
+									<curLevel>0.7160001</curLevel>
+								</li>
+							</needs>
+						</needs>
+						<guest>
+							<hostFaction>null</hostFaction>
+							<slaveFaction>null</slaveFaction>
+							<joinStatus>JoinAsSlave</joinStatus>
+							<interactionMode>NoInteraction</interactionMode>
+							<slaveInteractionMode>NoInteraction</slaveInteractionMode>
+							<spotToWaitInsteadOfEscaping>(-1000, -1000, -1000)</spotToWaitInsteadOfEscaping>
+							<lastPrisonBreakTicks>-1</lastPrisonBreakTicks>
+							<ideoForConversion>null</ideoForConversion>
+						</guest>
+						<guilt />
+						<royalty>
+							<titles />
+							<favor>
+								<keys />
+								<values />
+							</favor>
+							<highestTitles>
+								<keys />
+								<values />
+							</highestTitles>
+							<heirs>
+								<keys />
+								<values />
+							</heirs>
+							<permits />
+							<abilities />
+						</royalty>
+						<social>
+							<directRelations />
+							<relativeInvolvedInRescueQuest>null</relativeInvolvedInRescueQuest>
+						</social>
+						<psychicEntropy>
+							<currentPsyfocus>0.75</currentPsyfocus>
+							<limitEntropyAmount>True</limitEntropyAmount>
+						</psychicEntropy>
+						<ownership>
+							<ownedBed>null</ownedBed>
+							<assignedMeditationSpot>null</assignedMeditationSpot>
+							<assignedGrave>null</assignedGrave>
+							<assignedThrone>null</assignedThrone>
+						</ownership>
+						<interactions />
+						<skills>
+							<skills>
+								<li>
+									<def>Shooting</def>
+									<level>1</level>
+								</li>
+								<li>
+									<def>Melee</def>
+									<level>12</level>
+									<xpSinceLastLevel>-1.2</xpSinceLastLevel>
+									<passion>Major</passion>
+									<xpSinceMidnight>-1.2</xpSinceMidnight>
+								</li>
+								<li>
+									<def>Construction</def>
+									<level>6</level>
+									<passion>Minor</passion>
+								</li>
+								<li>
+									<def>Mining</def>
+								</li>
+								<li>
+									<def>Cooking</def>
+									<level>3</level>
+								</li>
+								<li>
+									<def>Plants</def>
+									<level>1</level>
+								</li>
+								<li>
+									<def>Animals</def>
+									<level>3</level>
+								</li>
+								<li>
+									<def>Crafting</def>
+									<level>8</level>
+									<passion>Minor</passion>
+								</li>
+								<li>
+									<def>Artistic</def>
+									<level>4</level>
+								</li>
+								<li>
+									<def>Medicine</def>
+									<level>9</level>
+									<passion>Major</passion>
+								</li>
+								<li>
+									<def>Social</def>
+								</li>
+								<li>
+									<def>Intellectual</def>
+								</li>
+							</skills>
+							<lastXpSinceMidnightResetTimestamp>-1</lastXpSinceMidnightResetTimestamp>
+						</skills>
+						<abilities>
+							<abilities />
+						</abilities>
+						<ideo>
+							<ideo>null</ideo>
+							<previousIdeos />
+							<certainty>0.7831042</certainty>
+						</ideo>
+						<workSettings>
+							<priorities>
+								<vals>
+									<li>3</li>
+									<li>3</li>
+									<li>3</li>
+									<li>3</li>
+									<li>3</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>3</li>
+									<li>3</li>
+									<li>0</li>
+									<li>3</li>
+									<li>3</li>
+									<li>3</li>
+									<li>0</li>
+									<li>3</li>
+									<li>3</li>
+									<li>3</li>
+									<li>0</li>
+								</vals>
+							</priorities>
+						</workSettings>
+						<trader IsNull="True" />
+						<outfits>
+							<curOutfit>null</curOutfit>
+							<overrideHandler>
+								<forcedAps />
+							</overrideHandler>
+						</outfits>
+						<drugs>
+							<curAssignedDrugs>null</curAssignedDrugs>
+							<drugTakeRecords />
+						</drugs>
+						<foodRestriction>
+							<curRestriction>null</curRestriction>
+						</foodRestriction>
+						<timetable>
+							<times>
+								<li>Sleep</li>
+								<li>Sleep</li>
+								<li>Sleep</li>
+								<li>Sleep</li>
+								<li>Sleep</li>
+								<li>Sleep</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Anything</li>
+								<li>Sleep</li>
+								<li>Sleep</li>
+							</times>
+						</timetable>
+						<playerSettings>
+							<medCare>Best</medCare>
+							<areaAllowed>null</areaAllowed>
+							<master>null</master>
+						</playerSettings>
+						<training IsNull="True" />
+						<style>
+							<beardDef>NoBeard</beardDef>
+							<faceTattoo>NoTattoo_Face</faceTattoo>
+							<bodyTattoo>NoTattoo_Body</bodyTattoo>
+						</style>
+						<styleObserver />
+						<connections>
+							<connectedThings />
+						</connections>
+						<inventoryStock>
+							<stockEntries>
+								<keys>
+									<li>Medicine</li>
+								</keys>
+								<values>
+									<li>
+										<thingDef>MedicineIndustrial</thingDef>
+									</li>
+								</values>
+							</stockEntries>
+						</inventoryStock>
+						<treeSightings>
+							<miniTreeSightings />
+							<fullTreeSightings />
+							<superTreeSightings />
+						</treeSightings>
+					</pawn>
+					<pawnKindDef IsNull="True" />
+					<examplePawn IsNull="True" />
+					<requiredWeapons />
+				</li>
+			</pawnOptions>
+		</li>
+		<li>
+			<name>Wave 2</name>
+			<pawnOptions>
+				<li>
+					<pawn IsNull="True" />
+					<pawnKindDef>
+						<race>Human</race>
+						<defName>Human0</defName>
+						<label>human</label>
+						<apparelTags />
+						<apparelRequired />
+						<apparelMoney>7607.935~7607.935</apparelMoney>
+						<weaponTags />
+						<weaponMoney>50~500</weaponMoney>
+						<techHediffsTags>
+							<li>ImplantEmpireRoyal</li>
+						</techHediffsTags>
+						<techHediffsRequired />
+					</pawnKindDef>
+					<examplePawn>
+						<def>Human</def>
+						<id>Human56957</id>
+						<questTags IsNull="True" />
+						<name Class="NameTriple">
+							<first>Matt</first>
+							<nick>Matteo</nick>
+							<last>Gaines</last>
+						</name>
+						<mindState>
+							<meleeThreat>null</meleeThreat>
+							<enemyTarget>null</enemyTarget>
+							<knownExploder>null</knownExploder>
+							<lastMannedThing>null</lastMannedThing>
+							<lastAttackedTarget>(0, 0, 0)</lastAttackedTarget>
+							<thinkData>
+								<keys />
+								<values />
+							</thinkData>
+							<lastEngageTargetTick>-99999</lastEngageTargetTick>
+							<lastAttackTargetTick>-99999</lastAttackTargetTick>
+							<canFleeIndividual>True</canFleeIndividual>
+							<lastMeleeThreatHarmTick>-99999</lastMeleeThreatHarmTick>
+							<nextMoveOrderIsWait>False</nextMoveOrderIsWait>
+							<duty IsNull="True" />
+							<mentalStateHandler>
+								<curState IsNull="True" />
+							</mentalStateHandler>
+							<mentalBreaker />
+							<inspirationHandler>
+								<curState IsNull="True" />
+							</inspirationHandler>
+							<priorityWork>
+								<prioritizedCell>(-1000, -1000, -1000)</prioritizedCell>
+								<prioritizeTick>623</prioritizeTick>
+							</priorityWork>
+							<lastSelfTendTick>-99999</lastSelfTendTick>
+							<breachingTarget IsNull="True" />
+						</mindState>
+						<jobs IsNull="True" />
+						<stances IsNull="True" />
+						<verbTracker>
+							<verbs IsNull="True" />
+						</verbTracker>
+						<natives IsNull="True" />
+						<meleeVerbs>
+							<curMeleeVerb>null</curMeleeVerb>
+							<terrainVerbs IsNull="True" />
+						</meleeVerbs>
+						<rotationTracker IsNull="True" />
+						<pather IsNull="True" />
+						<carryTracker>
+							<innerContainer>
+								<maxStacks>1</maxStacks>
+								<innerList />
+							</innerContainer>
+						</carryTracker>
+						<apparel>
+							<wornApparel>
+								<innerList>
+									<li>
+										<def>Apparel_Slicecap</def>
+										<id>Apparel_Slicecap56958</id>
+										<health>80</health>
+										<stackCount>1</stackCount>
+										<stuff>Steel</stuff>
+										<questTags IsNull="True" />
+										<color>RGBA(0.824, 0.824, 0.824, 1.000)</color>
+										<colorActive>True</colorActive>
+										<quality>Normal</quality>
+										<sourcePrecept>null</sourcePrecept>
+									</li>
+								</innerList>
+							</wornApparel>
+							<lockedApparel />
+							<lastApparelWearoutTick>-1</lastApparelWearoutTick>
+						</apparel>
+						<story>
+							<childhood>ComaChild93</childhood>
+							<adulthood>MenagerieKeeper1</adulthood>
+							<bodyType>Thin</bodyType>
+							<crownType>Average</crownType>
+							<headGraphicPath>Things/Pawn/Humanlike/Heads/Male/Male_Average_Normal</headGraphicPath>
+							<hairDef>Mohawk</hairDef>
+							<hairColor>RGBA(0.757, 0.573, 0.333, 1.000)</hairColor>
+							<melanin>0.1906602</melanin>
+							<traits>
+								<allTraits>
+									<li>
+										<def>Beauty</def>
+										<degree>2</degree>
+									</li>
+									<li>
+										<def>DrugDesire</def>
+										<degree>1</degree>
+									</li>
+									<li>
+										<def>Immunity</def>
+										<degree>1</degree>
+									</li>
+								</allTraits>
+							</traits>
+							<birthLastName>Gaines</birthLastName>
+							<favoriteColor>RGBA(0.667, 0.749, 0.337, 1.000)</favoriteColor>
+						</story>
+						<equipment>
+							<equipment>
+								<innerList>
+									<li>
+										<def>Gun_ChainShotgun</def>
+										<id>Gun_ChainShotgun56959</id>
+										<health>100</health>
+										<stackCount>1</stackCount>
+										<questTags IsNull="True" />
+										<verbTracker>
+											<verbs>
+												<li Class="Verb_Shoot">
+													<loadID>CompEquippable_Gun_ChainShotgun56959_0</loadID>
+													<lastShotTick>-999999</lastShotTick>
+													<canHitNonTargetPawnsNow>True</canHitNonTargetPawnsNow>
+												</li>
+												<li Class="Verb_MeleeAttackDamage">
+													<loadID>CompEquippable_Gun_ChainShotgun56959_0_Smash</loadID>
+													<lastShotTick>-999999</lastShotTick>
+													<canHitNonTargetPawnsNow>True</canHitNonTargetPawnsNow>
+												</li>
+												<li Class="Verb_MeleeAttackDamage">
+													<loadID>CompEquippable_Gun_ChainShotgun56959_1_Smash</loadID>
+													<lastShotTick>-999999</lastShotTick>
+													<canHitNonTargetPawnsNow>True</canHitNonTargetPawnsNow>
+												</li>
+												<li Class="Verb_MeleeAttackDamage">
+													<loadID>CompEquippable_Gun_ChainShotgun56959_1_Poke</loadID>
+													<lastShotTick>-999999</lastShotTick>
+													<canHitNonTargetPawnsNow>True</canHitNonTargetPawnsNow>
+												</li>
+											</verbs>
+										</verbTracker>
+										<sourcePrecept>null</sourcePrecept>
+										<taleRef IsNull="True" />
+										<quality>Normal</quality>
+										<codedPawn>null</codedPawn>
+									</li>
+								</innerList>
+							</equipment>
+							<bondedWeapon>null</bondedWeapon>
+						</equipment>
+						<drafter IsNull="True" />
+						<ageTracker>
+							<ageBiologicalTicks>114493369</ageBiologicalTicks>
+							<birthAbsTicks>-114120246</birthAbsTicks>
+							<growth>1</growth>
+							<nextGrowthCheckTick>863</nextGrowthCheckTick>
+							<ageReversalDemandedAtAgeTicks>115873369</ageReversalDemandedAtAgeTicks>
+						</ageTracker>
+						<healthTracker>
+							<hediffSet>
+								<hediffs />
+							</hediffSet>
+							<surgeryBills>
+								<bills />
+							</surgeryBills>
+							<immunity>
+								<imList />
+							</immunity>
+						</healthTracker>
+						<records>
+							<records>
+								<vals>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+									<li>0</li>
+								</vals>
+							</records>
+							<battleActive>null</battleActive>
+						</records>
+						<inventory>
+							<itemsNotForSale />
+							<unpackedCaravanItems />
+							<innerContainer>
+								<innerList />
+							</innerContainer>
+						</inventory>
+						<filth IsNull="True" />
+						<roping IsNull="True" />
+						<needs>
+							<needs>
+								<li Class="Need_Mood">
+									<def>Mood</def>
+									<curLevel>0.5</curLevel>
+									<thoughts>
+										<memories>
+											<memories />
+										</memories>
+									</thoughts>
+									<recentMemory />
+								</li>
+								<li Class="Need_Food">
+									<def>Food</def>
+									<curLevel>0.8</curLevel>
+									<lastNonStarvingTick>623</lastNonStarvingTick>
+								</li>
+								<li Class="Need_Rest">
+									<def>Rest</def>
+									<curLevel>0.9545818</curLevel>
+								</li>
+							</needs>
+						</needs>
+						<guest>
+							<hostFaction>null</hostFaction>
+							<slaveFaction>null</slaveFaction>
+							<joinStatus>JoinAsColonist</joinStatus>
+							<interactionMode>NoInteraction</interactionMode>
+							<slaveInteractionMode>NoInteraction</slaveInteractionMode>
+							<spotToWaitInsteadOfEscaping>(-1000, -1000, -1000)</spotToWaitInsteadOfEscaping>
+							<lastPrisonBreakTicks>-1</lastPrisonBreakTicks>
+							<ideoForConversion>null</ideoForConversion>
+						</guest>
+						<guilt />
+						<royalty>
+							<titles />
+							<favor>
+								<keys />
+								<values />
+							</favor>
+							<highestTitles>
+								<keys />
+								<values />
+							</highestTitles>
+							<heirs>
+								<keys />
+								<values />
+							</heirs>
+							<permits />
+							<abilities />
+						</royalty>
+						<social>
+							<directRelations />
+							<everSeenByPlayer>False</everSeenByPlayer>
+							<relativeInvolvedInRescueQuest>null</relativeInvolvedInRescueQuest>
+						</social>
+						<psychicEntropy>
+							<currentPsyfocus>0.6283334</currentPsyfocus>
+							<limitEntropyAmount>True</limitEntropyAmount>
+						</psychicEntropy>
+						<ownership>
+							<ownedBed>null</ownedBed>
+							<assignedMeditationSpot>null</assignedMeditationSpot>
+							<assignedGrave>null</assignedGrave>
+							<assignedThrone>null</assignedThrone>
+						</ownership>
+						<interactions IsNull="True" />
+						<skills>
+							<skills>
+								<li>
+									<def>Shooting</def>
+									<level>1</level>
+								</li>
+								<li>
+									<def>Melee</def>
+									<level>3</level>
+									<passion>Minor</passion>
+								</li>
+								<li>
+									<def>Construction</def>
+									<level>1</level>
+								</li>
+								<li>
+									<def>Mining</def>
+								</li>
+								<li>
+									<def>Cooking</def>
+									<level>2</level>
+								</li>
+								<li>
+									<def>Plants</def>
+									<level>1</level>
+								</li>
+								<li>
+									<def>Animals</def>
+									<level>12</level>
+									<passion>Major</passion>
+								</li>
+								<li>
+									<def>Crafting</def>
+									<level>4</level>
+									<passion>Minor</passion>
+								</li>
+								<li>
+									<def>Artistic</def>
+									<level>2</level>
+								</li>
+								<li>
+									<def>Medicine</def>
+									<level>3</level>
+								</li>
+								<li>
+									<def>Social</def>
+									<level>8</level>
+									<passion>Major</passion>
+								</li>
+								<li>
+									<def>Intellectual</def>
+									<level>1</level>
+								</li>
+							</skills>
+							<lastXpSinceMidnightResetTimestamp>-1</lastXpSinceMidnightResetTimestamp>
+						</skills>
+						<abilities>
+							<abilities />
+						</abilities>
+						<ideo>
+							<ideo>null</ideo>
+							<previousIdeos />
+							<certainty>0.6682494</certainty>
+							<joinTick>623</joinTick>
+						</ideo>
+						<workSettings>
+							<priorities IsNull="True" />
+						</workSettings>
+						<trader IsNull="True" />
+						<outfits IsNull="True" />
+						<drugs IsNull="True" />
+						<foodRestriction IsNull="True" />
+						<timetable IsNull="True" />
+						<playerSettings IsNull="True" />
+						<training IsNull="True" />
+						<style>
+							<beardDef>NoBeard</beardDef>
+							<faceTattoo>Face_Double</faceTattoo>
+							<bodyTattoo>NoTattoo_Body</bodyTattoo>
+						</style>
+						<styleObserver />
+						<connections>
+							<connectedThings />
+						</connections>
+						<inventoryStock IsNull="True" />
+						<treeSightings>
+							<miniTreeSightings />
+							<fullTreeSightings />
+							<superTreeSightings />
+						</treeSightings>
+					</examplePawn>
+					<requiredWeapons>
+						<li>Gun_ChainShotgun</li>
+					</requiredWeapons>
+				</li>
+			</pawnOptions>
+		</li>
+	</waves>
+</WaveInfoData>

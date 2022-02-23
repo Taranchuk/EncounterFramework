@@ -1,25 +1,28 @@
 ﻿using Mono.Unix.Native;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Verse;
 using Verse.Sound;
+using System.Linq;
+using RimWorld;
 
 namespace EncounterFramework
 {
+
     [HotSwappableAttribute]
 	[StaticConstructorOnStartup]
 	public class Window_WaveDesigner : Window
     {
-		public List<WaveInfo> waves = new List<WaveInfo>();
-		public override Vector2 InitialSize => new Vector2(800, 800);
-
+		public WaveHolder waveHolder;
+		public override Vector2 InitialSize => new Vector2(800, 600);
 		public WaveInfo curWaveInfo;
 		public PawnInfo curPawnInfo;
 		public Window_WaveDesigner()
         {
 			this.doCloseX = true;
+			waveHolder = new WaveHolder();
 		}
-
 		private float prevHeight;
 
 		WaveInfo waveToRemove = null;
@@ -29,7 +32,7 @@ namespace EncounterFramework
 			var waveSection = new Rect(inRect.x + 5f, inRect.y + 5f, UIUtils.SecondColumnWidth, 200);
 			Widgets.DrawMenuSection(waveSection);
 			waveSection = waveSection.ContractedBy(5);
-			var totalRect = new Rect(waveSection.x, waveSection.y, waveSection.width - 16, waves.Count * (UIUtils.LineHeight + 3));
+			var totalRect = new Rect(waveSection.x, waveSection.y, waveSection.width - 16, waveHolder.waves.Count * (UIUtils.LineHeight + 3));
 			Widgets.BeginScrollView(waveSection, ref scrollPosition2, totalRect);
 			Vector2 pos = waveSection.position;
 			int groupId = ReorderableWidget.NewGroup_NewTemp(delegate (int from, int to)
@@ -37,9 +40,9 @@ namespace EncounterFramework
 				TryReorder(from, to);
 			}, ReorderableDirection.Vertical);
 
-			for (var i = 0; i < waves.Count; i++)
+			for (var i = 0; i < waveHolder.waves.Count; i++)
             {
-				var wave = waves[i];
+				var wave = waveHolder.waves[i];
 				Rect waveInfoRect = new Rect(waveSection.x, pos.y, waveSection.width - 45, UIUtils.LineHeight);
 				if (ReorderableWidget.Reorderable(groupId, waveInfoRect))
 				{
@@ -68,24 +71,45 @@ namespace EncounterFramework
 
 			if (waveToRemove != null)
             {
-				waves.Remove(waveToRemove);
+				waveHolder.waves.Remove(waveToRemove);
 				if (waveToRemove == curWaveInfo)
                 {
 					curWaveInfo = null;
                 }
             }
+
 			Widgets.EndScrollView();
 			var createNewWaveRect = new Rect(inRect.x + 5f, waveSection.yMax + 15, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
 			if (Widgets.ButtonText(createNewWaveRect, "EF.CreateNewWave".Translate()))
 			{
 				var wave = new WaveInfo();
-				wave.name = "EF.NewWave".Translate(waves.Count + 1);
+				wave.name = "EF.NewWave".Translate(waveHolder.waves.Count + 1);
 				var window = new Window_NewWaveName(this, wave);
 				Find.WindowStack.Add(window);
 			}
 
 			if (curWaveInfo != null)
             {
+				var list = Enum.GetValues(typeof(WaveSpawnOption)).Cast<WaveSpawnOption>().ToList();
+				var spawnOptionLabelRect = new Rect(createNewWaveRect.x, createNewWaveRect.yMax + 5, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
+				Widgets.Label(spawnOptionLabelRect, "EF.SelectSpawnMode".Translate());
+				pos.y = spawnOptionLabelRect.yMax;
+				for (int i = 0; i < list.Count; i++)
+				{
+					var spawnOption = list[i];
+					var optionRect = new Rect(spawnOptionLabelRect.x + 15, pos.y, spawnOptionLabelRect.width - 15, UIUtils.LineHeight);
+					pos.y += UIUtils.LineHeight;
+					if (Widgets.RadioButtonLabeled(optionRect, ("EF." + spawnOption.ToString()).Translate(), curWaveInfo.spawnOption == spawnOption))
+                    {
+						curWaveInfo.spawnOption = spawnOption;
+					}
+				}
+
+				var timeBeforeSpawnRect = new Rect(spawnOptionLabelRect.x, pos.y, UIUtils.SecondColumnWidth, UIUtils.LineHeight);
+				Widgets.Label(timeBeforeSpawnRect, "EF.TimeBeforeSpawn".Translate());
+				var timeBeforeSpawnSliderRect = new Rect(timeBeforeSpawnRect.x, timeBeforeSpawnRect.yMax + 5, timeBeforeSpawnRect.width, timeBeforeSpawnRect.height);
+				curWaveInfo.timeToSpawn = (int)Widgets.HorizontalSlider(timeBeforeSpawnSliderRect, curWaveInfo.timeToSpawn, 0f, GenDate.TicksPerDay, true, curWaveInfo.timeToSpawn.ToStringTicksToPeriod());
+
 				pos = new Vector2(waveSection.xMax + 30, waveSection.y);
 				var pawnSection = new Rect(pos.x, pos.y, 520, 500);
 				Widgets.DrawMenuSection(pawnSection);
@@ -128,11 +152,34 @@ namespace EncounterFramework
 					var window = new Window_ChoosePawnOptions(this);
 					Find.WindowStack.Add(window);
 				}
-
 				prevHeight = (pos.y - waveSection.y) + pawnOptionSize + innerMargin;
 				Widgets.EndScrollView();
+			}
 
+			var cancelButtonRect = new Rect(inRect.x + 10, inRect.height - 30, 150, 31);
+			if (Widgets.ButtonText(cancelButtonRect, "Cancel".Translate()))
+			{
+				Close();
+			}
 
+			var importWaveSettingsRect = new Rect(cancelButtonRect.xMax + 50, cancelButtonRect.y, cancelButtonRect.width, cancelButtonRect.height);
+			if (Widgets.ButtonText(importWaveSettingsRect, "EF.ImportWaveSettings".Translate()))
+			{
+				var window = new Dialog_WaveSettingsList(this);
+				Find.WindowStack.Add(window);
+			}
+
+			var exportWaveSettingsRect = new Rect(importWaveSettingsRect.xMax + 50, cancelButtonRect.y, cancelButtonRect.width, cancelButtonRect.height);
+			if (Widgets.ButtonText(exportWaveSettingsRect, "EF.ExportWaveSettings".Translate()))
+			{
+				var window = new Dialog_SaveWaveSettings(this);
+				Find.WindowStack.Add(window);
+			}
+
+			var closeButtonRect = new Rect(exportWaveSettingsRect.xMax + 50, cancelButtonRect.y, cancelButtonRect.width, cancelButtonRect.height);
+			if (Widgets.ButtonText(closeButtonRect, "Close".Translate()))
+			{
+				this.Close();
 			}
 		}
 
@@ -148,8 +195,8 @@ namespace EncounterFramework
 			{
 				return;
 			}
-			waves.Insert(newIndex, waves[index]);
-			waves.RemoveAt((index < newIndex) ? index : (index + 1));
+			waveHolder.waves.Insert(newIndex, waveHolder.waves[index]);
+			waveHolder.waves.RemoveAt((index < newIndex) ? index : (index + 1));
 		}
 	}
 }
