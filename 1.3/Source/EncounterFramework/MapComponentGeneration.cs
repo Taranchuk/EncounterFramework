@@ -40,7 +40,7 @@ namespace EncounterFramework
             {
                 try
                 {
-                    LocationGenerationUtils.DoSettlementGeneration(this.map, this.path, this.locationData, this.map.ParentFaction, false);
+                    LocationGenerationUtils.DoLocationGeneration(this.map, this.path, this.locationData, this.map.ParentFaction, false);
                 }
                 catch (Exception ex)
                 {
@@ -51,7 +51,7 @@ namespace EncounterFramework
                 GenerationContext.customSettlementGeneration = false;
                 this.doGeneration = false;
             }
-            if (this.reFog)
+            if (this.reFog && map.mapPawns.FreeColonistsSpawned.Any())
             {
                 Log.Message("Refog" + this.map);
                 try

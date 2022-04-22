@@ -44,8 +44,8 @@
     <Compile Include="BlueprintUtility.cs" />
     <Compile Include="Comps\CompLootContainer.cs" />
     <Compile Include="Comps\CompWaveGenerator.cs" />
-    <Compile Include="Comps\CompWorldScanner.cs" />
     <Compile Include="Comps\HotSwappableAttribute.cs" />
+    <Compile Include="HarmonyPatches\Patch_Site_CheckAllEnemiesDefeated.cs" />
     <Compile Include="Waves\Dialog_SaveWaveSettings.cs" />
     <Compile Include="Waves\Dialog_WaveSettingsList.cs" />
     <Compile Include="Waves\IOUtils.cs" />
@@ -70,12 +70,11 @@
     <Compile Include="EncounterFrameworkMod.cs" />
     <Compile Include="HarmonyPatches\Patch_SettlementDefeatUtility_IsDefeated.cs" />
     <Compile Include="HarmonyPatches\Patch_TryFindSpawnCell.cs" />
-    <Compile Include="HarmonyPatches\VisitSettlementFloat.cs" />
+    <Compile Include="HarmonyPatches\SymbolResolver_Settlement_Resolve.cs" />
     <Compile Include="UI\DebugActions.cs" />
     <Compile Include="UI\Dialog_NameBlueprint.cs" />
     <Compile Include="UI\Dialog_SaveEverything.cs" />
     <Compile Include="GenStep_LocationGeneration.cs" />
-    <Compile Include="Jobs\JobDriver_UseWorldScanner.cs" />
     <Compile Include="LocationData.cs" />
     <Compile Include="LootGenerator.cs" />
     <Compile Include="LootOption.cs" />
@@ -87,10 +86,9 @@
     <Compile Include="LocationDef.cs" />
     <Compile Include="MapComponentGeneration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="HarmonyPatches\GetOrGenerateMapPatch.cs" />
+    <Compile Include="HarmonyPatches\SettlementUtility_AttackNow_Patch.cs" />
     <Compile Include="LocationGenerationUtils.cs" />
     <Compile Include="SettlementOptionModExtension.cs" />
-    <Compile Include="Jobs\WorkGiver_PerformPingingOnWorldScanner.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Publicizer">
@@ -99,10 +97,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Krafs.Rimworld.Ref">
-      <Version>1.3.3279-beta</Version>
+      <Version>1.3.3326</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">
-      <Version>2.2.0</Version>
+      <Version>2.2.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

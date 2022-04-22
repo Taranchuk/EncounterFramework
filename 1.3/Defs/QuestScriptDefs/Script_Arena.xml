@@ -63,7 +63,7 @@
 					<sitePartsParams>$sitePartsParams</sitePartsParams>
 				</li>
 
-				<li Class="LocationGeneration.QuestNode_SetMapSize">
+				<li Class="EncounterFramework.QuestNode_SetMapSize">
 					<tile>$siteTile</tile>
 					<mapSize>(250, 1, 250)</mapSize>
 				</li>

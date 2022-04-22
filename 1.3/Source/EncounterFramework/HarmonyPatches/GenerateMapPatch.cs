@@ -32,7 +32,7 @@ namespace EncounterFramework
                     {
                         GenerationContext.LocationData.locationDef = locationDef;
                     }
-                    LocationGenerationUtils.DoSettlementGeneration(parent.Map, preset.FullName, GenerationContext.LocationData, parent.Faction, false);
+                    LocationGenerationUtils.DoLocationGeneration(parent.Map, preset.FullName, GenerationContext.LocationData, parent.Faction, false);
                 }
             }
         }

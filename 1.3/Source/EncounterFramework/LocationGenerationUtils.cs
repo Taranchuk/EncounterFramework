@@ -106,8 +106,10 @@ namespace EncounterFramework
             }
             return cell + offset;
         }
-        public static HashSet<IntVec3> DoSettlementGeneration(Map map, string path, LocationData locationData, Faction faction, bool disableFog)
+        public static HashSet<IntVec3> DoLocationGeneration(Map map, string path, LocationData locationData, Faction faction, bool disableFog)
         {
+            Log.Message("DoLocationGeneration: " + path + " - " + map);
+            map.mapDrawer.RegenerateEverythingNow();
             GenerationContext.LocationData = null;
             GenerationContext.caravanArrival = false;
             var mapComp = map.GetComponent<MapComponentGeneration>();
@@ -120,6 +122,7 @@ namespace EncounterFramework
                     {
                         for (int i = thingsToDespawn.Count - 1; i >= 0; i--)
                         {
+
                             try
                             {
                                 if (thingsToDespawn[i].Spawned)
@@ -492,7 +495,38 @@ namespace EncounterFramework
                             var position = GetOffsetPosition(locationData.locationDef, terrain.Key, offset);
                             if (GenGrid.InBounds(position, map))
                             {
-                                map.terrainGrid.SetTerrain(position, terrain.Value);
+                                var terrainDef = terrain.Value;
+                                if (terrainDef != null)
+                                {
+                                    map.terrainGrid.SetTerrain(position, terrainDef);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("8 Error in map generating, cant spawn " + terrain.Key + " - " + ex);
+                        }
+                    }
+
+                    foreach (var terrain in terrains)
+                    {
+                        try
+                        {
+                            var position = GetOffsetPosition(locationData.locationDef, terrain.Key, offset);
+                            if (GenGrid.InBounds(position, map))
+                            {
+                                var terrainDef = terrain.Value;
+                                if (terrainDef is null)
+                                {
+                                    terrainDef = position.GetRoom(map).Cells.Select(x => x.GetTerrain(map)).GroupBy(x => x)
+                                        .OrderByDescending(x => x.Count()).First().Key;
+                                    if (terrainDef.IsSoil)
+                                    {
+                                        terrainDef = GenRadial.RadialCellsAround(position, 15f, true).Select(x => x.GetTerrain(map)).GroupBy(x => x)
+                                        .OrderByDescending(x => x.Count()).First().Key;
+                                    }
+                                    map.terrainGrid.SetTerrain(position, terrainDef);
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -687,7 +721,7 @@ namespace EncounterFramework
                     LordMaker.MakeNewLord(pawn.Faction, lordJob, map, null).AddPawn(pawn);
                 }
 
-                if (disableFog != true)
+                if (disableFog != true && map.mapPawns.FreeColonistsSpawned.Any())
                 {
                     try
                     {

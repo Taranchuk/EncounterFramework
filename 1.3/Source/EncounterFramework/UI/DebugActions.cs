@@ -75,7 +75,7 @@ namespace EncounterFramework
                     {
                         path = path + name;
                         Map map = Find.CurrentMap;
-                        LocationGenerationUtils.DoSettlementGeneration(map, path, null, Faction.OfPlayer, false);
+                        LocationGenerationUtils.DoLocationGeneration(map, path, null, Faction.OfPlayer, false);
                     }));
                 }
             }

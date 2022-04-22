@@ -7,7 +7,7 @@ using Verse.AI.Group;
 namespace EncounterFramework
 {
     [HarmonyPatch(typeof(SymbolResolver_Settlement), "Resolve")]
-    public class VisitSettlementFloat
+    public class SymbolResolver_Settlement_Resolve
     {
         public static readonly FloatRange DefaultPawnsPoints = new FloatRange(1150f, 1600f);
         private static bool Prefix(ResolveParams rp)
@@ -16,7 +16,7 @@ namespace EncounterFramework
             if (GenerationContext.customSettlementGeneration)
             {
                 Faction faction = rp.faction ?? Find.FactionManager.RandomEnemyFaction();
-                LocationGenerationUtils.DoSettlementGeneration(map, GenerationContext.LocationData.file.FullName, GenerationContext.LocationData, faction, false);
+                LocationGenerationUtils.DoLocationGeneration(map, GenerationContext.LocationData.file.FullName, GenerationContext.LocationData, faction, false);
 
                 rp.rect = rp.rect.MovedBy(map.Center - rp.rect.CenterCell);
                 //foreach (var cell in rp.rect.Cells)

@@ -36,7 +36,7 @@
     <defName>DevArena</defName>
     <linkWithSite>DevArena</linkWithSite>
     <order>9999</order>
-    <genStep Class="LocationGeneration.GenStep_LocationGeneration">
+    <genStep Class="EncounterFramework.GenStep_LocationGeneration">
 		<locationDef>DevArena</locationDef>
 	</genStep>
   </GenStepDef>
