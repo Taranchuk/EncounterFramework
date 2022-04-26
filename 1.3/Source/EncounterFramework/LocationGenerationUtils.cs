@@ -717,7 +717,7 @@ namespace EncounterFramework
                     {
                         map.lordManager.RemoveLord(lord);
                     }
-                    var lordJob = new LordJob_DefendPoint(pawn.Position);
+                    var lordJob = new LordJob_DefendPoint(pawn.Position, 6f);
                     LordMaker.MakeNewLord(pawn.Faction, lordJob, map, null).AddPawn(pawn);
                 }
 
