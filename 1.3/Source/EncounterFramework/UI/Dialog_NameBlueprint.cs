@@ -8,9 +8,9 @@ using Verse;
 
 namespace EncounterFramework
 {
-    public class Dialog_NameBlueprint : Dialog_Rename
+    public class Dialog_MakeBlueprintFromHomeMap : Dialog_Rename
     {
-        public Dialog_NameBlueprint(string name, bool includePawns)
+        public Dialog_MakeBlueprintFromHomeMap(string name, bool includePawns)
         {
             this.name = name;
             this.includePawns = includePawns;

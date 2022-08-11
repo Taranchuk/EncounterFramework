@@ -31,7 +31,7 @@ namespace EncounterFramework
         public static void CreateBlueprint()
         {
             string name = "";
-            var dialog = new Dialog_NameBlueprint(name, true);
+            var dialog = new Dialog_MakeBlueprintFromHomeMap(name, true);
             Find.WindowStack.Add(dialog);
         }
 
@@ -39,7 +39,7 @@ namespace EncounterFramework
         public static void SaveEverything()
         {
             string name = "";
-            var dialog = new Dialog_SaveEverything(name);
+            var dialog = new Dialog_MakeBlueprintForEverything(name);
             Find.WindowStack.Add(dialog);
         }
 
@@ -47,7 +47,7 @@ namespace EncounterFramework
         public static void CreateBlueprintWithoutPawns()
         {
             string name = "";
-            var dialog = new Dialog_NameBlueprint(name, false);
+            var dialog = new Dialog_MakeBlueprintFromHomeMap(name, false);
             Find.WindowStack.Add(dialog);
         }
 
@@ -55,10 +55,8 @@ namespace EncounterFramework
         public static void LoadBlueprint()
         {
             var curModName = LoadedModManager.RunningMods.Where(x => x.assemblies.loadedAssemblies.Contains(Assembly.GetExecutingAssembly())).FirstOrDefault().Name;
-            Log.Message("curModName: " + curModName);
             ModMetaData modMetaData = ModLister.AllInstalledMods.FirstOrDefault((ModMetaData x) => x != null && x.Name != null && x.Active && x.Name == curModName);
             string path = Path.GetFullPath(modMetaData.RootDir.ToString() + "/Presets/");
-            Log.Message("path: " + path);
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
             if (!directoryInfo.Exists)
             {

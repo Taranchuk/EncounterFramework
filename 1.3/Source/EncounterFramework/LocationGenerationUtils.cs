@@ -108,7 +108,6 @@ namespace EncounterFramework
         }
         public static HashSet<IntVec3> DoLocationGeneration(Map map, string path, LocationData locationData, Faction faction, bool disableFog)
         {
-            Log.Message("DoLocationGeneration: " + path + " - " + map);
             map.mapDrawer.RegenerateEverythingNow();
             GenerationContext.LocationData = null;
             GenerationContext.caravanArrival = false;
@@ -640,40 +639,22 @@ namespace EncounterFramework
                         if (FindChestTreasureSpawnLoc(locationData, treasureChest, locationCells, map, out IntVec3 cellToSpawn, out Rot4 rot))
                         {
                             GenPlace.TryPlaceThing(treasureChest, cellToSpawn, map, ThingPlaceMode.Direct, null, null, rot);
-                            Log.Message("Spawning: " + treasureChest);
                         }
-                        else
-                        {
-                            Log.Message("Couldn't find a place for " + treasureChest);
-                        }
-
                     }
                 }
-                Log.Message("locationData.locationDef: " + locationData.locationDef.defName);
-                Log.Message("locationData.locationDef.threatGenerator: " + locationData.locationDef.threatGenerator);
                 if (locationData.locationDef.threatGenerator != null)
                 {
                     List<Pawn> inhabitants = new List<Pawn>();
                     foreach (var threatOption in locationData.locationDef.threatGenerator.options)
                     {
-                        Log.Message("threatOption: " + threatOption);
-
                         if (Rand.Chance(threatOption.chance))
                         {
-                            Log.Message("chance success threatOption: " + threatOption);
-
                             SpawnPawns(map, locationCells, threatOption, inhabitants);
-                        }
-                        else
-                        {
-                            Log.Message("chance fail threatOption: " + threatOption + " - " + threatOption.chance);
                         }
                     }
                     if (locationData.locationDef.threatGenerator.optionsOneOfAll != null 
                         && locationData.locationDef.threatGenerator.optionsOneOfAll.TryRandomElementByWeight(x => x.chance, out var threatOption2))
                     {
-                        Log.Message("chance success threatOption2: " + threatOption2 + " - " + threatOption2.chance);
-
                         SpawnPawns(map, locationCells, threatOption2, inhabitants);
                     }
                 }
@@ -814,10 +795,6 @@ namespace EncounterFramework
                             LordMaker.MakeNewLord(pawnGroupMakerParms.faction, lordJob, map, Gen.YieldSingle<Pawn>(pawn));
                         }
                         GenSpawn.Spawn(pawn, cellToSpawn, map);
-                    }
-                    else
-                    {
-                        Log.Message("Failed to spawn: " + pawn);
                     }
                 }
             }

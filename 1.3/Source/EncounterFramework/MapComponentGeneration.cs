@@ -53,7 +53,6 @@ namespace EncounterFramework
             }
             if (this.reFog && map.mapPawns.FreeColonistsSpawned.Any())
             {
-                Log.Message("Refog" + this.map);
                 try
                 {
                     FloodFillerFog.DebugRefogMap(this.map);

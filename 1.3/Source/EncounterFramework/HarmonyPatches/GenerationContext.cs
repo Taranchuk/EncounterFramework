@@ -14,7 +14,6 @@ namespace EncounterFramework
             }
             set
             {
-                Log.Message("Setting location");
                 locationData = value;
             }
         }

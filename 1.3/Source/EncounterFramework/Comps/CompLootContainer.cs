@@ -65,8 +65,7 @@ namespace EncounterFramework
                 {
                     qualityComp.SetQuality(lootOption.GetQuality(), ArtGenerationContext.Outsider);
                 }
-                                        (this.parent as Building_Casket).TryAcceptThing(thing);
-                Log.Message("Generating " + thing + " stack count: " + thing.stackCount + " stacklimit: " + thing.def.stackLimit + " - quality: " + qualityComp?.Quality + " for " + this.parent);
+                (this.parent as Building_Casket).TryAcceptThing(thing);
             }
         }
     }

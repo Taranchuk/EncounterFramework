@@ -11,7 +11,6 @@ namespace EncounterFramework
         public static void Prefix(CaravanArrivalAction_VisitSite __instance, Caravan caravan, Site ___site)
         {
             GenerationContext.caravanArrival = true;
-            Log.Message("GetOrGenerateMapPatch.caravanArrival true");
         }
         public static void Postfix(CaravanArrivalAction_VisitSite __instance, Caravan caravan, Site ___site)
         {

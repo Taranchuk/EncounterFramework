@@ -8,10 +8,10 @@ using Verse;
 
 namespace EncounterFramework
 {
-    public class Dialog_SaveEverything : Dialog_Rename
+    public class Dialog_MakeBlueprintForEverything : Dialog_Rename
     {
         private string name;
-        public Dialog_SaveEverything(string name)
+        public Dialog_MakeBlueprintForEverything(string name)
         {
             this.name = name;
         }

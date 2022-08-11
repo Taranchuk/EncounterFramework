@@ -17,7 +17,6 @@ namespace EncounterFramework
             {
                 mapSize = worldComp.tileSizes[parent.Tile];
                 worldComp.tileSizes.Remove(parent.Tile);
-                Log.Message("Changing map size to " + mapSize);
             }
         }
 
