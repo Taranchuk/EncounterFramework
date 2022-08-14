@@ -10,10 +10,10 @@ namespace EncounterFramework
     {
         public static void Prefix(ref Caravan caravan, ref Settlement settlement)
         {
-            var filePreset = LocationGenerationUtils.GetPresetFor(settlement, out LocationDef locationDef);
+            var filePreset = Utils.GetPresetFor(settlement, out LocationDef locationDef);
             if (filePreset != null)
             {
-                GenerationContext.LocationData = new LocationData(locationDef, filePreset);
+                GenerationContext.locationData = new LocationData(locationDef, filePreset);
                 GenerationContext.customSettlementGeneration = true;
             }
         }

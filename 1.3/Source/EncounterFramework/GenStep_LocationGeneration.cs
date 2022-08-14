@@ -17,10 +17,10 @@ namespace EncounterFramework
         public override int SeedPart => 341641510;
         public override void Generate(Map map, GenStepParams parms)
         {
-            var filePreset = LocationGenerationUtils.GetPresetFor(map.Parent, locationDef);
+            var filePreset = Utils.GetPresetFor(map.Parent, locationDef);
             if (filePreset != null)
             {
-                GenerationContext.LocationData = new LocationData(locationDef, filePreset);
+                GenerationContext.locationData = new LocationData(locationDef, filePreset);
             }
         }
     }

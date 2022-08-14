@@ -16,7 +16,7 @@ namespace EncounterFramework
             if (GenerationContext.customSettlementGeneration)
             {
                 Faction faction = rp.faction ?? Find.FactionManager.RandomEnemyFaction();
-                LocationGenerationUtils.DoLocationGeneration(map, GenerationContext.LocationData.file.FullName, GenerationContext.LocationData, faction, false);
+                Utils.DoGeneration(map, GenerationContext.locationData.file.FullName, GenerationContext.locationData, faction, false);
 
                 rp.rect = rp.rect.MovedBy(map.Center - rp.rect.CenterCell);
                 //foreach (var cell in rp.rect.Cells)

@@ -20,9 +20,9 @@ namespace EncounterFramework
         {
             this.name = name;
             Map map = Find.CurrentMap;
-            BlueprintUtility.SaveEverything(IOUtils.GetFullPath(name, "/Presets/Locations/"), map);
+            var contentSaveEverything = new ContentSaver_SaveEverything();
+            contentSaveEverything.SaveAt(IOUtils.GetFullPath(name, "/Presets/Locations/"), map);
         }
-
     }
 }
 

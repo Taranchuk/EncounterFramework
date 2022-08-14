@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.IO;
 using System.Linq;
-using HarmonyLib;
 using RimWorld;
 using RimWorld.BaseGen;
 using RimWorld.Planet;
@@ -16,13 +15,13 @@ using Verse.Noise;
 
 namespace EncounterFramework
 {
-    public static class LocationGenerationUtils
+    public static class Utils
     {
         public static LocationDef GetLocationDefForMapParent(MapParent mapParent)
         {
-            if (GenerationContext.LocationData?.locationDef != null)
+            if (GenerationContext.locationData?.locationDef != null)
             {
-                return GenerationContext.LocationData.locationDef;
+                return GenerationContext.locationData.locationDef;
             }
 
             foreach (var locationDef in DefDatabase<LocationDef>.AllDefs)
@@ -106,10 +105,10 @@ namespace EncounterFramework
             }
             return cell + offset;
         }
-        public static HashSet<IntVec3> DoLocationGeneration(Map map, string path, LocationData locationData, Faction faction, bool disableFog)
+        public static HashSet<IntVec3> DoGeneration(Map map, string path, LocationData locationData, Faction faction, bool disableFog)
         {
             map.mapDrawer.RegenerateEverythingNow();
-            GenerationContext.LocationData = null;
+            GenerationContext.locationData = null;
             GenerationContext.caravanArrival = false;
             var mapComp = map.GetComponent<MapComponentGeneration>();
             try
@@ -165,6 +164,7 @@ namespace EncounterFramework
                 Scribe.loader.InitLoading(path);
 
                 Log_Error_Patch.suppressErrorMessages = true;
+                Log_Warning_Patch.suppressWarningMessages = true;
                 Scribe_Collections.Look<Pawn>(ref pawnCorpses, "PawnCorpses", LookMode.Deep, new object[0]);
                 Scribe_Collections.Look<Corpse>(ref corpses, "Corpses", LookMode.Deep, new object[0]);
                 Scribe_Collections.Look<Pawn>(ref pawns, "Pawns", LookMode.Deep, new object[0]);
@@ -178,6 +178,7 @@ namespace EncounterFramework
                 Scribe_Collections.Look<IntVec3>(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
                 Scribe.loader.FinalizeLoading();
                 Log_Error_Patch.suppressErrorMessages = false;
+                Log_Warning_Patch.suppressWarningMessages = false;
 
                 if (corpses is null)
                 {
@@ -927,7 +928,7 @@ namespace EncounterFramework
             }
             return seedPart + num;
         }
-        public static void InitialiseEncounterFramework(Map map, FileInfo file, LocationData locationData)
+        public static void InitialiseLocationGeneration(Map map, FileInfo file, LocationData locationData)
         {
             if (locationData.locationDef != null && file != null)
             {
@@ -995,20 +996,6 @@ namespace EncounterFramework
         public static List<TerrainDef> terrainValues = new List<TerrainDef>();
         public static List<IntVec3> roofsKeys = new List<IntVec3>();
         public static List<RoofDef> roofsValues = new List<RoofDef>();
-    }
-
-    [HarmonyPatch(typeof(Log), nameof(Log.Error), new Type[] { typeof(string) })]
-    public static class Log_Error_Patch
-    {
-        public static bool suppressErrorMessages;
-        public static bool Prefix()
-        {
-            if (suppressErrorMessages)
-            {
-                return false;
-            }
-            return true;
-        }
     }
 }
 

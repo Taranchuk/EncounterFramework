@@ -6,9 +6,8 @@ using Verse;
 
 namespace EncounterFramework
 {
-    [HarmonyPatch(typeof(MapGenerator))]
-    [HarmonyPatch("GenerateMap")]
-    public static class GenerateMapPatch
+    [HarmonyPatch(typeof(MapGenerator), "GenerateMap")]
+    public static class MapGenerator_GenerateMap_Patch
     {
         public static void Prefix(ref IntVec3 mapSize, MapParent parent, MapGeneratorDef mapGenerator, IEnumerable<GenStepWithParams> extraGenStepDefs = null, Action<Map> extraInitBeforeContentGen = null)
         {
@@ -24,14 +23,14 @@ namespace EncounterFramework
         {
             if (!GenerationContext.caravanArrival)
             {
-                var preset = LocationGenerationUtils.GetPresetFor(parent, out LocationDef locationDef);
+                var preset = Utils.GetPresetFor(parent, out LocationDef locationDef);
                 if (preset != null && locationDef != null)
                 {
-                    if (GenerationContext.LocationData.locationDef is null)
+                    if (GenerationContext.locationData.locationDef is null)
                     {
-                        GenerationContext.LocationData.locationDef = locationDef;
+                        GenerationContext.locationData.locationDef = locationDef;
                     }
-                    LocationGenerationUtils.DoLocationGeneration(parent.Map, preset.FullName, GenerationContext.LocationData, parent.Faction, false);
+                    Utils.DoGeneration(parent.Map, preset.FullName, GenerationContext.locationData, parent.Faction, false);
                 }
             }
         }

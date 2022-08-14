@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using RimWorld;
 using Verse;
 
 namespace EncounterFramework
 {
-    public static class BlueprintUtility
+    public class ContentSaver_SaveEverything : ContentSaver
     {
-        public static void SaveEverything(string path, Map map)
+        public override void SaveAt(string path, Map map)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(Path.GetDirectoryName(path));
             if (!directoryInfo.Exists)
@@ -77,6 +75,8 @@ namespace EncounterFramework
                 tilesToSpawnPawnsOnThem.Add(homeCell);
             }
 
+            Log_Error_Patch.suppressErrorMessages = true;
+            Log_Warning_Patch.suppressWarningMessages = true;
             Scribe.saver.InitSaving(path, "Blueprint");
             Scribe_Collections.Look<Pawn>(ref pawnCorpses, "PawnCorpses", LookMode.Deep, new object[0]);
             Scribe_Collections.Look<Corpse>(ref corpses, "Corpses", LookMode.Deep, new object[0]);
@@ -89,12 +89,9 @@ namespace EncounterFramework
             Scribe_Collections.Look<IntVec3, RoofDef>(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
             Scribe_Collections.Look<IntVec3>(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
             Scribe.saver.FinalizeSaving();
+            Log_Error_Patch.suppressErrorMessages = false;
+            Log_Warning_Patch.suppressWarningMessages = false;
         }
-
-        public static List<IntVec3> terrainKeys = new List<IntVec3>();
-        public static List<IntVec3> roofsKeys = new List<IntVec3>();
-        public static List<TerrainDef> terrainValues = new List<TerrainDef>();
-        public static List<RoofDef> roofsValues = new List<RoofDef>();
     }
 }
 

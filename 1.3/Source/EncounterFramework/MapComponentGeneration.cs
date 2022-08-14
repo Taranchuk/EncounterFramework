@@ -40,14 +40,14 @@ namespace EncounterFramework
             {
                 try
                 {
-                    LocationGenerationUtils.DoLocationGeneration(this.map, this.path, this.locationData, this.map.ParentFaction, false);
+                    Utils.DoGeneration(this.map, this.path, this.locationData, this.map.ParentFaction, false);
                 }
                 catch (Exception ex)
                 {
                     Log.Error(ex.ToString());
                 }
                 GenerationContext.caravanArrival = false;
-                GenerationContext.LocationData = null;
+                GenerationContext.locationData = null;
                 GenerationContext.customSettlementGeneration = false;
                 this.doGeneration = false;
             }

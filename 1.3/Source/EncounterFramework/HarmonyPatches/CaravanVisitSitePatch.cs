@@ -16,20 +16,20 @@ namespace EncounterFramework
         {
             if (!___site.HasMap)
             {
-                LongEventHandler.QueueLongEvent(delegate ()
+                LongEventHandler.QueueLongEvent((System.Action)delegate ()
                 {
-                    var filePreset = LocationGenerationUtils.GetPresetFor(___site, out LocationDef locationDef);
-                    if (filePreset != null && GenerationContext.LocationData is null)
+                    var filePreset = Utils.GetPresetFor(___site, out LocationDef locationDef);
+                    if (filePreset != null && GenerationContext.locationData is null)
                     {
                         GenerationContext.customSettlementGeneration = true;
-                        GenerationContext.LocationData = new LocationData(locationDef, filePreset);
+                        GenerationContext.locationData = new LocationData(locationDef, filePreset);
                     }
                     Map orGenerateMap = GetOrGenerateMapUtility.GetOrGenerateMap(___site.Tile, null);
                     CaravanEnterMapUtility.Enter(caravan, orGenerateMap, CaravanEnterMode.Edge, 0, true, null);
 
                     if (filePreset != null)
                     {
-                        LocationGenerationUtils.InitialiseEncounterFramework(orGenerateMap, filePreset, GenerationContext.LocationData);
+                        Utils.InitialiseLocationGeneration(orGenerateMap, filePreset, (LocationData)GenerationContext.locationData);
                     }
                 }, "GeneratingMapForNewEncounter", false, null, true);
             }

@@ -41,11 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlueprintUtility.cs" />
+    <Compile Include="ContentSaver.cs" />
     <Compile Include="Comps\CompLootContainer.cs" />
     <Compile Include="Comps\CompWaveGenerator.cs" />
     <Compile Include="Comps\HotSwappableAttribute.cs" />
+    <Compile Include="ContentSaver_SaveEverything.cs" />
+    <Compile Include="HarmonyPatches\Log_Warning_Patch.cs" />
     <Compile Include="HarmonyPatches\Patch_Site_CheckAllEnemiesDefeated.cs" />
+    <Compile Include="ContentSaver_SaveFromHomeMap.cs" />
+    <Compile Include="HarmonyPatches\Log_Error_Patch.cs" />
     <Compile Include="Waves\Dialog_SaveWaveSettings.cs" />
     <Compile Include="Waves\Dialog_WaveSettingsList.cs" />
     <Compile Include="Waves\IOUtils.cs" />
@@ -62,10 +66,10 @@
     <Compile Include="Waves\Window_SelectRace.cs" />
     <Compile Include="Waves\Window_WaveDesigner.cs" />
     <Compile Include="Waves\Window_WaveDesigner_Options.cs" />
-    <Compile Include="HarmonyPatches\CaravanVisitPatch.cs" />
+    <Compile Include="HarmonyPatches\CaravanArrivalAction_VisitSettlement_Arrived_Patch.cs" />
     <Compile Include="HarmonyPatches\CaravanVisitSitePatch.cs" />
     <Compile Include="HarmonyPatches\GenerateMapPatch.cs" />
-    <Compile Include="HarmonyPatches\GenerationContext.cs" />
+    <Compile Include="GenerationContext.cs" />
     <Compile Include="HarmonyPatches\GiveShortHash_Patch.cs" />
     <Compile Include="EncounterFrameworkMod.cs" />
     <Compile Include="HarmonyPatches\Patch_SettlementDefeatUtility_IsDefeated.cs" />
