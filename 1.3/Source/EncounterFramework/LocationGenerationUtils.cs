@@ -36,6 +36,11 @@ namespace EncounterFramework
 
         public static FileInfo GetPresetFor(MapParent mapParent, out LocationDef locationDef)
         {
+            if (GenerationContext.locationData != null && GenerationContext.locationData.mapParent == mapParent)
+            {
+                locationDef = GenerationContext.locationData.locationDef;
+                return GenerationContext.locationData.file;
+            }
             locationDef = GetLocationDefForMapParent(mapParent);
             return GetPresetFor(mapParent, locationDef);
         }

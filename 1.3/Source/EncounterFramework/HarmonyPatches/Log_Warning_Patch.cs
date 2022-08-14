@@ -4,7 +4,7 @@ using Verse;
 
 namespace EncounterFramework
 {
-    [HarmonyPatch(typeof(Log), nameof(Log.Warning), new Type[] { typeof(string), typeof(bool) })]
+    [HarmonyPatch(typeof(Log), nameof(Log.Warning), new Type[] { typeof(string) })]
     public static class Log_Warning_Patch
     {
         public static bool suppressWarningMessages;

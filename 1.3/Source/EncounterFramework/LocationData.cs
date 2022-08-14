@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,10 +31,12 @@ namespace EncounterFramework
     {
         public LocationDef locationDef;
         public FileInfo file;
-        public LocationData(LocationDef locationDef, FileInfo file)
+        public MapParent mapParent;
+        public LocationData(LocationDef locationDef, FileInfo file, MapParent mapParent = null)
         {
             this.file = file;
             this.locationDef = locationDef;
+            this.mapParent = mapParent;
         }
     }
 }

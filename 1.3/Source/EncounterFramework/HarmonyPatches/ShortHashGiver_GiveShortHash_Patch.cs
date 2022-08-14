@@ -5,7 +5,7 @@ using Verse;
 namespace EncounterFramework
 {
     [HarmonyPatch(typeof(ShortHashGiver), "GiveShortHash")]
-    public static class GiveShortHash_Patch
+    public static class ShortHashGiver_GiveShortHash_Patch
     {
         private static bool Prefix(Def def, Type defType)
         {
