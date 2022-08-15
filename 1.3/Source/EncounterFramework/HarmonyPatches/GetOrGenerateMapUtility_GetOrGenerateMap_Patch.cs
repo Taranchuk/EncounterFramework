@@ -18,6 +18,10 @@ namespace EncounterFramework
             {
                 Utils.DoGeneration(__result, GenerationContext.locationData, __result.ParentFaction);
             }
+            else
+            {
+                __result.GetComponent<MapComponentGeneration>().factionCells = Utils.GetFactionCells(__result, null, __result.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial), out _);
+            }
         }
     }
 }

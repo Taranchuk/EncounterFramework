@@ -18,21 +18,5 @@ namespace EncounterFramework
                 worldComp.tileSizes.Remove(parent.Tile);
             }
         }
-
-        public static void Postfix(Map __result, IntVec3 mapSize, MapParent parent, MapGeneratorDef mapGenerator, IEnumerable<GenStepWithParams> extraGenStepDefs = null, Action<Map> extraInitBeforeContentGen = null)
-        {
-            if (!GenerationContext.caravanArrival)
-            {
-                var preset = Utils.GetPresetFor(parent, out LocationDef locationDef);
-                if (preset != null && locationDef != null)
-                {
-                    if (GenerationContext.locationData.locationDef is null)
-                    {
-                        GenerationContext.locationData.locationDef = locationDef;
-                    }
-                    Utils.DoGeneration(__result, GenerationContext.locationData, __result.ParentFaction);
-                }
-            }
-        }
     }
 }

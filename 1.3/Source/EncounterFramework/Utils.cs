@@ -236,12 +236,12 @@ namespace EncounterFramework
 
                 foreach (var p in pawns)
                 {
-                    DoPawnCleanup(p);
+                    DoPawnCleanup(p, faction);
                 }
 
                 foreach (var corpse in corpses)
                 {
-                    DoPawnCleanup(corpse.InnerPawn);
+                    DoPawnCleanup(corpse.InnerPawn, faction);
                 }
 
                 HashSet<IntVec3> factionCells = GetFactionCells(map, locationData.locationDef, buildings.Cast<Thing>().ToList(), out IntVec3 offset);
@@ -771,7 +771,7 @@ namespace EncounterFramework
             return false;
         }
 
-        private static void DoPawnCleanup(Pawn pawn)
+        private static void DoPawnCleanup(Pawn pawn, Faction faction)
         {
             PawnComponentsUtility.CreateInitialComponents(pawn);
             PawnComponentsUtility.AddComponentsForSpawn(pawn);
@@ -785,7 +785,15 @@ namespace EncounterFramework
             {
                 if (pawn.ideo.ideo is null)
                 {
-                    pawn.ideo.SetIdeo(pawn.Faction.ideos.PrimaryIdeo);
+                    var newIdeo = pawn.Faction?.ideos?.PrimaryIdeo ?? faction.ideos?.PrimaryIdeo;
+                    if (newIdeo != null)
+                    {
+                        pawn.ideo.SetIdeo(newIdeo);
+                    }
+                }
+                if (pawn.guest.IsPrisoner && pawn.guest.HostFaction is null)
+                {
+                    pawn.guest.hostFactionInt = faction;
                 }
                 if (pawn.story.hairDef is null)
                 {

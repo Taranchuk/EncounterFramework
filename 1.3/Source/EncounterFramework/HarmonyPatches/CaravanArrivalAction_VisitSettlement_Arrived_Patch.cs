@@ -13,11 +13,9 @@ namespace EncounterFramework
         }
         public static void Postfix(CaravanArrivalAction_VisitSettlement __instance, Caravan caravan, Settlement ___settlement)
         {
-            Log.Message("CaravanArrivalAction_VisitSettlement");
             if (!___settlement.HasMap)
             {
                 var filePreset = Utils.GetPresetFor(___settlement, out LocationDef locationDef);
-                Log.Message(filePreset + " - " + ___settlement + " - " + locationDef);
                 if (filePreset != null)
                 {
                     GenerationContext.customSettlementGeneration = true;
@@ -29,7 +27,6 @@ namespace EncounterFramework
                     {
                         Map orGenerateMap = GetOrGenerateMapUtility.GetOrGenerateMap(___settlement.Tile, null);
                         CaravanEnterMapUtility.Enter(caravan, orGenerateMap, CaravanEnterMode.Edge, 0, true, null);
-                        Log.Message(caravan + " enters " + orGenerateMap);
                     }, "GeneratingMapForNewEncounter", false, null, true);
                     return;
                 }
