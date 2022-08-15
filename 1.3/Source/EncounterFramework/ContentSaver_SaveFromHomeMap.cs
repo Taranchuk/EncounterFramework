@@ -140,16 +140,16 @@ namespace EncounterFramework
             }
 
             Scribe.saver.InitSaving(path, "Blueprint");
-            Scribe_Collections.Look<Pawn>(ref pawnCorpses, "PawnCorpses", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Corpse>(ref corpses, "Corpses", LookMode.Deep, new object[0]);
+            Scribe_Collections.Look<Pawn>(ref pawnCorpses, "PawnCorpses", LookMode.Deep);
+            Scribe_Collections.Look<Corpse>(ref corpses, "Corpses", LookMode.Deep);
             if (this.includePawns)
             {
-                Scribe_Collections.Look<Pawn>(ref pawns, "Pawns", LookMode.Deep, new object[0]);
+                Scribe_Collections.Look<Pawn>(ref pawns, "Pawns", LookMode.Deep);
             }
-            Scribe_Collections.Look<Building>(ref buildings, "Buildings", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Thing>(ref things, "Things", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Filth>(ref filths, "Filths", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Plant>(ref plants, "Plants", LookMode.Deep, new object[0]);
+            Scribe_Collections.Look<Building>(ref buildings, "Buildings", LookMode.Deep);
+            Scribe_Collections.Look<Thing>(ref things, "Things", LookMode.Deep);
+            Scribe_Collections.Look<Filth>(ref filths, "Filths", LookMode.Deep);
+            Scribe_Collections.Look<Plant>(ref plants, "Plants", LookMode.Deep);
             Scribe_Collections.Look<IntVec3, TerrainDef>(ref terrains, "Terrains", LookMode.Value, LookMode.Def, ref terrainKeys, ref terrainValues);
             Scribe_Collections.Look<IntVec3, RoofDef>(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
             Scribe_Collections.Look<IntVec3>(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);

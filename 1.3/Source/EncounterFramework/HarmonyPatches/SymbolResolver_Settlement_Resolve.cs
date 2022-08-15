@@ -16,13 +16,7 @@ namespace EncounterFramework
             if (GenerationContext.customSettlementGeneration)
             {
                 Faction faction = rp.faction ?? Find.FactionManager.RandomEnemyFaction();
-                Utils.DoGeneration(map, GenerationContext.locationData.file.FullName, GenerationContext.locationData, faction, false);
-
                 rp.rect = rp.rect.MovedBy(map.Center - rp.rect.CenterCell);
-                //foreach (var cell in rp.rect.Cells)
-                //{
-                //}
-
                 Lord singlePawnLord = rp.singlePawnLord ?? LordMaker.MakeNewLord(faction, new LordJob_DefendBase(faction, rp.rect.CenterCell), map);
                 TraverseParms traverseParms = TraverseParms.For(TraverseMode.PassDoors);
                 ResolveParams resolveParams = rp;

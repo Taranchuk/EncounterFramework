@@ -32,6 +32,7 @@ namespace EncounterFramework
         public LocationDef locationDef;
         public FileInfo file;
         public MapParent mapParent;
+
         public LocationData(LocationDef locationDef, FileInfo file, MapParent mapParent = null)
         {
             this.file = file;

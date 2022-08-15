@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -46,6 +47,7 @@
     <Compile Include="Comps\CompWaveGenerator.cs" />
     <Compile Include="Comps\HotSwappableAttribute.cs" />
     <Compile Include="ContentSaver_SaveEverything.cs" />
+    <Compile Include="HarmonyPatches\GetOrGenerateMapUtility_GetOrGenerateMap_Patch.cs" />
     <Compile Include="HarmonyPatches\Log_Warning_Patch.cs" />
     <Compile Include="HarmonyPatches\Patch_Site_CheckAllEnemiesDefeated.cs" />
     <Compile Include="ContentSaver_SaveFromHomeMap.cs" />
@@ -90,7 +92,7 @@
     <Compile Include="MapComponentGeneration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HarmonyPatches\SettlementUtility_AttackNow_Patch.cs" />
-    <Compile Include="LocationGenerationUtils.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="SettlementOptionModExtension.cs" />
   </ItemGroup>
   <ItemGroup>

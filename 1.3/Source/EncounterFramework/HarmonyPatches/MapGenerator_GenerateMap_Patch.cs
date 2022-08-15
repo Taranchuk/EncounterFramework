@@ -19,7 +19,7 @@ namespace EncounterFramework
             }
         }
 
-        public static void Postfix(IntVec3 mapSize, MapParent parent, MapGeneratorDef mapGenerator, IEnumerable<GenStepWithParams> extraGenStepDefs = null, Action<Map> extraInitBeforeContentGen = null)
+        public static void Postfix(Map __result, IntVec3 mapSize, MapParent parent, MapGeneratorDef mapGenerator, IEnumerable<GenStepWithParams> extraGenStepDefs = null, Action<Map> extraInitBeforeContentGen = null)
         {
             if (!GenerationContext.caravanArrival)
             {
@@ -30,7 +30,7 @@ namespace EncounterFramework
                     {
                         GenerationContext.locationData.locationDef = locationDef;
                     }
-                    Utils.DoGeneration(parent.Map, preset.FullName, GenerationContext.locationData, parent.Faction, false);
+                    Utils.DoGeneration(__result, GenerationContext.locationData, __result.ParentFaction);
                 }
             }
         }

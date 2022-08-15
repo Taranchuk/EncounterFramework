@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.IO;
 using System.Linq;
 using RimWorld;
-using RimWorld.BaseGen;
 using RimWorld.Planet;
-using UnityEngine;
-using UnityEngine.Analytics;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
-using Verse.Noise;
 
 namespace EncounterFramework
 {
@@ -110,15 +105,16 @@ namespace EncounterFramework
             }
             return cell + offset;
         }
-        public static HashSet<IntVec3> DoGeneration(Map map, string path, LocationData locationData, Faction faction, bool disableFog)
+        public static HashSet<IntVec3> DoGeneration(Map map, LocationData locationData, Faction faction)
         {
             map.mapDrawer.RegenerateEverythingNow();
             GenerationContext.locationData = null;
             GenerationContext.caravanArrival = false;
             var mapComp = map.GetComponent<MapComponentGeneration>();
+            mapComp.refog = true;
             try
             {
-                if (locationData.locationDef != null && locationData.locationDef.destroyEverythingOnTheMapBeforeGeneration)
+                if (locationData.locationDef != null && locationData.locationDef.despawnEverythingOnTheMapBeforeGeneration)
                 {
                     var thingsToDespawn = map.listerThings.AllThings;
                     if (thingsToDespawn != null && thingsToDespawn.Count > 0)
@@ -165,22 +161,20 @@ namespace EncounterFramework
                 Dictionary<IntVec3, TerrainDef> terrains = new Dictionary<IntVec3, TerrainDef>();
                 Dictionary<IntVec3, RoofDef> roofs = new Dictionary<IntVec3, RoofDef>();
                 HashSet<IntVec3> tilesToSpawnPawnsOnThem = new HashSet<IntVec3>();
-
-                Scribe.loader.InitLoading(path);
-
+                Scribe.mode = LoadSaveMode.Inactive;
+                Scribe.loader.InitLoading(locationData.file.FullName);
                 Log_Error_Patch.suppressErrorMessages = true;
                 Log_Warning_Patch.suppressWarningMessages = true;
-                Scribe_Collections.Look<Pawn>(ref pawnCorpses, "PawnCorpses", LookMode.Deep, new object[0]);
-                Scribe_Collections.Look<Corpse>(ref corpses, "Corpses", LookMode.Deep, new object[0]);
-                Scribe_Collections.Look<Pawn>(ref pawns, "Pawns", LookMode.Deep, new object[0]);
-                Scribe_Collections.Look<Building>(ref buildings, "Buildings", LookMode.Deep, new object[0]);
-                Scribe_Collections.Look<Filth>(ref filths, "Filths", LookMode.Deep, new object[0]);
-                Scribe_Collections.Look<Thing>(ref things, "Things", LookMode.Deep, new object[0]);
-                Scribe_Collections.Look<Plant>(ref plants, "Plants", LookMode.Deep, new object[0]);
-
-                Scribe_Collections.Look<IntVec3, TerrainDef>(ref terrains, "Terrains", LookMode.Value, LookMode.Def, ref terrainKeys, ref terrainValues);
-                Scribe_Collections.Look<IntVec3, RoofDef>(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
-                Scribe_Collections.Look<IntVec3>(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
+                Scribe_Collections.Look(ref pawnCorpses, "PawnCorpses", LookMode.Deep);
+                Scribe_Collections.Look(ref corpses, "Corpses", LookMode.Deep);
+                Scribe_Collections.Look(ref pawns, "Pawns", LookMode.Deep);
+                Scribe_Collections.Look(ref buildings, "Buildings", LookMode.Deep);
+                Scribe_Collections.Look(ref filths, "Filths", LookMode.Deep);
+                Scribe_Collections.Look(ref things, "Things", LookMode.Deep);
+                Scribe_Collections.Look(ref plants, "Plants", LookMode.Deep);
+                Scribe_Collections.Look(ref terrains, "Terrains", LookMode.Value, LookMode.Def, ref terrainKeys, ref terrainValues);
+                Scribe_Collections.Look(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
+                Scribe_Collections.Look(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
                 Scribe.loader.FinalizeLoading();
                 Log_Error_Patch.suppressErrorMessages = false;
                 Log_Warning_Patch.suppressWarningMessages = false;
@@ -240,6 +234,16 @@ namespace EncounterFramework
                 else
                 {
                     plants.RemoveAll(x => x is null);
+                }
+
+                foreach (var p in pawns)
+                {
+                    DoPawnCleanup(p);
+                }
+
+                foreach (var corpse in corpses)
+                {
+                    DoPawnCleanup(corpse.InnerPawn);
                 }
 
                 var cells = new List<IntVec3>(tilesToSpawnPawnsOnThem);
@@ -707,38 +711,6 @@ namespace EncounterFramework
                     var lordJob = new LordJob_DefendPoint(pawn.Position, 6f);
                     LordMaker.MakeNewLord(pawn.Faction, lordJob, map, null).AddPawn(pawn);
                 }
-
-                if (disableFog != true && map.mapPawns.FreeColonistsSpawned.Any())
-                {
-                    try
-                    {
-                        FloodFillerFog.DebugRefogMap(map);
-                    }
-                    catch
-                    {
-                        foreach (var cell in map.AllCells)
-                        {
-                            if (!tilesToProcess.Contains(cell) && !(cell.GetFirstBuilding(map) is Mineable))
-                            {
-                                var item = cell.GetFirstItem(map);
-                                if (item != null)
-                                {
-                                    var room = item.GetRoom();
-                                    if (room != null)
-                                    {
-                                        if (room.PsychologicallyOutdoors)
-                                        {
-                                            FloodFillerFog.FloodUnfog(cell, map);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    mapComp.reFog = true;
-                }
-                mapComp.doGeneration = false;
-                mapComp.path = null;
                 GenerationContext.caravanArrival = false;
                 return locationCells;
             }
@@ -746,11 +718,110 @@ namespace EncounterFramework
             {
                 Log.Error("Error in DoSettlementGeneration: " + ex);
             }
-            mapComp.doGeneration = false;
-            mapComp.path = null;
             return null;
         }
+        private static bool CanBeTransferred(Thing thing)
+        {
+            if (thing?.def?.category == ThingCategory.Item)
+            {
+                if (thing.stackCount <= 0)
+                {
+                    return false;
+                }
+                if (thing is Corpse corpse && corpse.InnerPawn?.def is null)
+                {
+                    return false;
+                }
+                if (thing is MinifiedThing minifiedThing && minifiedThing.InnerThing is null)
+                {
+                    return false;
+                }
+                if (thing is UnfinishedThing unfinishedThing && (unfinishedThing.ingredients is null || unfinishedThing.ingredients.Any(x => x?.def is null)))
+                {
+                    return false;
+                }
 
+                var comp = thing.TryGetComp<CompIngredients>();
+                if (comp != null && (comp.ingredients is null || comp.ingredients.Any(x => x is null)))
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private static void DoPawnCleanup(Pawn pawn)
+        {
+            PawnComponentsUtility.CreateInitialComponents(pawn);
+            PawnComponentsUtility.AddComponentsForSpawn(pawn);
+            CleanupList(pawn.apparel?.WornApparel);
+            CleanupList(pawn.health.hediffSet.hediffs);
+            CleanupList(pawn.equipment?.equipment.innerList);
+            CleanupList(pawn.inventory?.innerContainer.innerList, x => CanBeTransferred(x) is false);
+            CleanupList(pawn.relations?.directRelations, x => x.def is null || x.otherPawn is null);
+            CleanupList(pawn.needs.mood?.thoughts.memories?.memories, x => x.def is null);
+            if (pawn.RaceProps.Humanlike)
+            {
+                if (pawn.ideo.ideo is null)
+                {
+                    pawn.ideo.SetIdeo(pawn.Faction.ideos.PrimaryIdeo);
+                }
+                if (pawn.story.hairDef is null)
+                {
+                    pawn.story.hairDef = PawnStyleItemChooser.RandomHairFor(pawn);
+                }
+                if (pawn.style != null)
+                {
+                    if (pawn.style.beardDef is null)
+                    {
+                        pawn.style.beardDef = ((pawn.gender == Verse.Gender.Male) ? PawnStyleItemChooser.ChooseStyleItem<BeardDef>(pawn) : BeardDefOf.NoBeard);
+                    }
+                    if (ModsConfig.IdeologyActive)
+                    {
+                        if (pawn.style.bodyTattoo is null)
+                        {
+                            pawn.style.faceTattoo = PawnStyleItemChooser.ChooseStyleItem<TattooDef>(pawn, TattooType.Face);
+                        }
+                        if (pawn.style.bodyTattoo is null)
+                        {
+                            pawn.style.bodyTattoo = PawnStyleItemChooser.ChooseStyleItem<TattooDef>(pawn, TattooType.Body);
+                        }
+                    }
+                    else
+                    {
+                        if (pawn.style.faceTattoo is null)
+                        {
+                            pawn.style.faceTattoo = TattooDefOf.NoTattoo_Face;
+                        }
+                        if (pawn.style.bodyTattoo is null)
+                        {
+                            pawn.style.bodyTattoo = TattooDefOf.NoTattoo_Body;
+                        }
+                    }
+                }
+            }
+        }
+        private static int CleanupList<T>(List<T> things, Predicate<T> predicate = null)
+        {
+            if (things is null) return -1;
+
+            if (predicate is null)
+            {
+                predicate = (x => x is null || typeof(T).GetField("def")?.GetValue(x) is null);
+            }
+
+            int numRemoved = 0;
+            for (int i = things.Count - 1; i >= 0; i--)
+            {
+                if (predicate(things[i]))
+                {
+                    things.RemoveAt(i);
+                    numRemoved++;
+                }
+            }
+            return numRemoved;
+        }
         private static void SpawnPawns(Map map, HashSet<IntVec3> locationCells, ThreatOption threatOption, List<Pawn> inhabitants)
         {
             if (threatOption.pawnGroupMaker != null)
@@ -933,19 +1004,7 @@ namespace EncounterFramework
             }
             return seedPart + num;
         }
-        public static void InitialiseLocationGeneration(Map map, FileInfo file, LocationData locationData)
-        {
-            if (locationData.locationDef != null && file != null)
-            {
-                var comp = map.GetComponent<MapComponentGeneration>();
-                if (comp.path?.Length == 0)
-                {
-                    comp.doGeneration = true;
-                    comp.path = file.FullName;
-                    comp.locationData = locationData;
-                }
-            }
-        }
+
         private static void TryDistributeTo(Thing thing, Map map, List<Thing> containers, bool setForbidden)
         {
             Dictionary<Thing, List<IntVec3>> containerPlaces = new Dictionary<Thing, List<IntVec3>>();

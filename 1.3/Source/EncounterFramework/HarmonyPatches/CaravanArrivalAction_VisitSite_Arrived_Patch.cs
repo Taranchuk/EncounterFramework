@@ -15,7 +15,7 @@ namespace EncounterFramework
         {
             if (!___site.HasMap)
             {
-                LongEventHandler.QueueLongEvent((System.Action)delegate ()
+                LongEventHandler.QueueLongEvent(delegate ()
                 {
                     var filePreset = Utils.GetPresetFor(___site, out LocationDef locationDef);
                     if (filePreset != null && GenerationContext.locationData is null)
@@ -25,11 +25,6 @@ namespace EncounterFramework
                     }
                     Map orGenerateMap = GetOrGenerateMapUtility.GetOrGenerateMap(___site.Tile, null);
                     CaravanEnterMapUtility.Enter(caravan, orGenerateMap, CaravanEnterMode.Edge, 0, true, null);
-
-                    if (filePreset != null)
-                    {
-                        Utils.InitialiseLocationGeneration(orGenerateMap, filePreset, (LocationData)GenerationContext.locationData);
-                    }
                 }, "GeneratingMapForNewEncounter", false, null, true);
             }
         }

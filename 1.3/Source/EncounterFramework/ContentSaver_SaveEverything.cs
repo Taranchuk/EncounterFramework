@@ -78,19 +78,39 @@ namespace EncounterFramework
             Log_Error_Patch.suppressErrorMessages = true;
             Log_Warning_Patch.suppressWarningMessages = true;
             Scribe.saver.InitSaving(path, "Blueprint");
-            Scribe_Collections.Look<Pawn>(ref pawnCorpses, "PawnCorpses", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Corpse>(ref corpses, "Corpses", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Pawn>(ref pawns, "Pawns", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Building>(ref buildings, "Buildings", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Filth>(ref filths, "Filths", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Thing>(ref things, "Things", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<Plant>(ref plants, "Plants", LookMode.Deep, new object[0]);
-            Scribe_Collections.Look<IntVec3, TerrainDef>(ref terrains, "Terrains", LookMode.Value, LookMode.Def, ref terrainKeys, ref terrainValues);
-            Scribe_Collections.Look<IntVec3, RoofDef>(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
-            Scribe_Collections.Look<IntVec3>(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
+            foreach (var b in buildings)
+            {
+                SetDeepLookMode(b);
+            }
+            Scribe_Collections.Look(ref pawnCorpses, "PawnCorpses", LookMode.Deep);
+            Scribe_Collections.Look(ref corpses, "Corpses", LookMode.Deep);
+            Scribe_Collections.Look(ref pawns, "Pawns", LookMode.Deep);
+            Scribe_Collections.Look(ref buildings, "Buildings", LookMode.Deep);
+            Scribe_Collections.Look(ref filths, "Filths", LookMode.Deep);
+            Scribe_Collections.Look(ref things, "Things", LookMode.Deep);
+            Scribe_Collections.Look(ref plants, "Plants", LookMode.Deep);
+            Scribe_Collections.Look(ref terrains, "Terrains", LookMode.Value, LookMode.Def, ref terrainKeys, ref terrainValues);
+            Scribe_Collections.Look(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
+            Scribe_Collections.Look(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
             Scribe.saver.FinalizeSaving();
             Log_Error_Patch.suppressErrorMessages = false;
             Log_Warning_Patch.suppressWarningMessages = false;
+        }
+
+        private static void SetDeepLookMode(Thing b)
+        {
+            if (b is IThingHolder thingHolder)
+            {
+                var heldThing = thingHolder.GetDirectlyHeldThings();
+                if (heldThing != null)
+                {
+                    heldThing.contentsLookMode = LookMode.Deep;
+                    foreach (var t in heldThing)
+                    {
+                        SetDeepLookMode(t);
+                    }
+                }
+            }
         }
     }
 }

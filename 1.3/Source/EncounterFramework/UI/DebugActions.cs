@@ -50,38 +50,6 @@ namespace EncounterFramework
             var dialog = new Dialog_MakeBlueprintFromHomeMap(name, false);
             Find.WindowStack.Add(dialog);
         }
-
-        [DebugAction("General", "Load blueprint")]
-        public static void LoadBlueprint()
-        {
-            var curModName = LoadedModManager.RunningMods.Where(x => x.assemblies.loadedAssemblies.Contains(Assembly.GetExecutingAssembly())).FirstOrDefault().Name;
-            ModMetaData modMetaData = ModLister.AllInstalledMods.FirstOrDefault((ModMetaData x) => x != null && x.Name != null && x.Active && x.Name == curModName);
-            string path = Path.GetFullPath(modMetaData.RootDir.ToString() + "/Presets/");
-            DirectoryInfo directoryInfo = new DirectoryInfo(path);
-            if (!directoryInfo.Exists)
-            {
-                directoryInfo.Create();
-            }
-            
-            List<DebugMenuOption> list = new List<DebugMenuOption>();
-            using (IEnumerator<FileInfo> enumerator = directoryInfo.GetFiles().AsEnumerable().GetEnumerator())
-            {
-                while (enumerator.MoveNext())
-                {
-                    string name = enumerator.Current.Name;
-                    list.Add(new DebugMenuOption(name, 0, delegate ()
-                    {
-                        path = path + name;
-                        Map map = Find.CurrentMap;
-                        Utils.DoGeneration(map, path, null, Faction.OfPlayer, false);
-                    }));
-                }
-            }
-            if (list.Any())
-            {
-                Find.WindowStack.Add(new Dialog_DebugOptionListLister(list));
-            }
-        }
     }
 }
 

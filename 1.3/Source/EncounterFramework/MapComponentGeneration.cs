@@ -36,56 +36,26 @@ namespace EncounterFramework
         public override void MapComponentUpdate()
         {
             base.MapComponentUpdate();
-            if (this.doGeneration && path?.Length > 0)
+            if (this.refog && map.mapPawns.FreeColonistsSpawned.Any())
             {
-                try
+                refogCount++;
+                if (refogCount > 3)
                 {
-                    Utils.DoGeneration(this.map, this.path, this.locationData, this.map.ParentFaction, false);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.ToString());
-                }
-                GenerationContext.caravanArrival = false;
-                GenerationContext.locationData = null;
-                GenerationContext.customSettlementGeneration = false;
-                this.doGeneration = false;
-            }
-            if (this.reFog && map.mapPawns.FreeColonistsSpawned.Any())
-            {
-                try
-                {
-                    FloodFillerFog.DebugRefogMap(this.map);
-                }
-                catch
-                {
+                    try
+                    {
+                        FloodFillerFog.DebugRefogMap(this.map);
+                    }
+                    catch
+                    {
 
+                    }
+                    this.refog = false;
+                    refogCount = 0;
                 }
-                this.reFog = false;
             }
         }
-
-        //public override void MapComponentTick()
-        //{
-        //    base.MapComponentTick();
-        //    foreach (var locationDef in DefDatabase<LocationDef>.AllDefs)
-        //    {
-        //        Log.Message(Path.GetFullPath(locationDef.modContentPack.RootDir + "//" + locationDef.filePreset));
-        //    }
-        //}
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Values.Look<bool>(ref this.doGeneration, "DoGeneration", false);
-            Scribe_Values.Look<string>(ref this.path, "path", "");
-        }
-
-        public bool doGeneration = false;
-        public bool reFog = false;
-        public string path = "";
-        public LocationData locationData;
-
+        public int refogCount = 0;
+        public bool refog = false;
     }
 }
 

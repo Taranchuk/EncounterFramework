@@ -16,7 +16,7 @@ namespace EncounterFramework
 
         public bool disableCenterCellOffset;
 
-        public bool destroyEverythingOnTheMapBeforeGeneration;
+        public bool despawnEverythingOnTheMapBeforeGeneration;
 
         public FactionDef factionDefForNPCsAndTurrets;
 
