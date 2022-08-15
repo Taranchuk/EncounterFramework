@@ -23,7 +23,6 @@ namespace EncounterFramework
             List<Plant> plants = new List<Plant>();
             Dictionary<IntVec3, TerrainDef> terrains = new Dictionary<IntVec3, TerrainDef>();
             Dictionary<IntVec3, RoofDef> roofs = new Dictionary<IntVec3, RoofDef>();
-            HashSet<IntVec3> tilesToSpawnPawnsOnThem = new HashSet<IntVec3>();
 
             foreach (var thing in map.listerThings.AllThings)
             {
@@ -70,11 +69,6 @@ namespace EncounterFramework
                 }
             }
 
-            foreach (IntVec3 homeCell in map.areaManager.Home.ActiveCells)
-            {
-                tilesToSpawnPawnsOnThem.Add(homeCell);
-            }
-
             Log_Error_Patch.suppressErrorMessages = true;
             Log_Warning_Patch.suppressWarningMessages = true;
             Scribe.saver.InitSaving(path, "Blueprint");
@@ -91,7 +85,6 @@ namespace EncounterFramework
             Scribe_Collections.Look(ref plants, "Plants", LookMode.Deep);
             Scribe_Collections.Look(ref terrains, "Terrains", LookMode.Value, LookMode.Def, ref terrainKeys, ref terrainValues);
             Scribe_Collections.Look(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
-            Scribe_Collections.Look(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
             Scribe.saver.FinalizeSaving();
             Log_Error_Patch.suppressErrorMessages = false;
             Log_Warning_Patch.suppressWarningMessages = false;

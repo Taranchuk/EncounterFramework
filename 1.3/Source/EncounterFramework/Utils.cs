@@ -83,7 +83,7 @@ namespace EncounterFramework
             return false;
         }
 
-        public static IntVec3 GetCellCenterFor(List<IntVec3> cells)
+        public static IntVec3 GetCellCenterFor(HashSet<IntVec3> cells)
         {
             var x_Averages = cells.OrderBy(x => x.x);
             var x_average = x_Averages.ElementAt(x_Averages.Count() / 2).x;
@@ -160,7 +160,6 @@ namespace EncounterFramework
                 List<Plant> plants = new List<Plant>();
                 Dictionary<IntVec3, TerrainDef> terrains = new Dictionary<IntVec3, TerrainDef>();
                 Dictionary<IntVec3, RoofDef> roofs = new Dictionary<IntVec3, RoofDef>();
-                HashSet<IntVec3> tilesToSpawnPawnsOnThem = new HashSet<IntVec3>();
                 Scribe.mode = LoadSaveMode.Inactive;
                 Scribe.loader.InitLoading(locationData.file.FullName);
                 Log_Error_Patch.suppressErrorMessages = true;
@@ -174,7 +173,6 @@ namespace EncounterFramework
                 Scribe_Collections.Look(ref plants, "Plants", LookMode.Deep);
                 Scribe_Collections.Look(ref terrains, "Terrains", LookMode.Value, LookMode.Def, ref terrainKeys, ref terrainValues);
                 Scribe_Collections.Look(ref roofs, "Roofs", LookMode.Value, LookMode.Def, ref roofsKeys, ref roofsValues);
-                Scribe_Collections.Look(ref tilesToSpawnPawnsOnThem, "tilesToSpawnPawnsOnThem", LookMode.Value);
                 Scribe.loader.FinalizeLoading();
                 Log_Error_Patch.suppressErrorMessages = false;
                 Log_Warning_Patch.suppressWarningMessages = false;
@@ -246,11 +244,8 @@ namespace EncounterFramework
                     DoPawnCleanup(corpse.InnerPawn);
                 }
 
-                var cells = new List<IntVec3>(tilesToSpawnPawnsOnThem);
-                cells.AddRange(buildings.Select(x => x.Position).ToList());
-                var centerCell = GetCellCenterFor(cells);
-                var offset = map.Center - centerCell;
-
+                HashSet<IntVec3> factionCells = GetFactionCells(map, locationData.locationDef, buildings.Cast<Thing>().ToList(), out IntVec3 offset);
+                mapComp.factionCells = factionCells;
                 if (corpses != null && corpses.Count > 0)
                 {
                     foreach (var corpse in corpses)
@@ -306,11 +301,10 @@ namespace EncounterFramework
                     }
                 }
 
-                if (tilesToSpawnPawnsOnThem != null && tilesToSpawnPawnsOnThem.Count > 0)
+                if (factionCells.Count > 0)
                 {
-                    foreach (var tile in tilesToSpawnPawnsOnThem)
+                    foreach (var position in factionCells)
                     {
-                        var position = GetOffsetPosition(locationData.locationDef, tile, offset);
                         try
                         {
                             if (GenGrid.InBounds(position, map))
@@ -337,7 +331,6 @@ namespace EncounterFramework
                     foreach (var building in buildings)
                     {
                         var position = GetOffsetPosition(locationData.locationDef, building.Position, offset);
-
                         foreach (var pos in GenRadial.RadialCellsAround(position, radiusToClear, true))
                         {
                             if (GenGrid.InBounds(pos, map))
@@ -637,7 +630,7 @@ namespace EncounterFramework
                     }
                 }
 
-                var locationCells = tilesToSpawnPawnsOnThem.Select(x => GetOffsetPosition(locationData.locationDef, x, offset)).ToHashSet();
+                var locationCells = factionCells.ToHashSet();
                 if (locationData.locationDef.lootGenerator != null)
                 {
                     var treasureCount = locationData.locationDef.lootGenerator.treasureChestCount.RandomInRange;
@@ -662,7 +655,7 @@ namespace EncounterFramework
                             SpawnPawns(map, locationCells, threatOption, inhabitants);
                         }
                     }
-                    if (locationData.locationDef.threatGenerator.optionsOneOfAll != null 
+                    if (locationData.locationDef.threatGenerator.optionsOneOfAll != null
                         && locationData.locationDef.threatGenerator.optionsOneOfAll.TryRandomElementByWeight(x => x.chance, out var threatOption2))
                     {
                         SpawnPawns(map, locationCells, threatOption2, inhabitants);
@@ -679,7 +672,7 @@ namespace EncounterFramework
                             map.mapPawns.PawnsInFaction(faction)[i].DeSpawn(DestroyMode.Vanish);
                         }
                     }
-                    if (options.pawnsToGenerate != null && options.pawnsToGenerate.Count > 0 && tilesToSpawnPawnsOnThem != null && tilesToSpawnPawnsOnThem.Count > 0)
+                    if (options.pawnsToGenerate != null && options.pawnsToGenerate.Count > 0 && factionCells.Count > 0)
                     {
                         foreach (var pawn in options.pawnsToGenerate)
                         {
@@ -688,7 +681,7 @@ namespace EncounterFramework
                                 var settler = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pawn.kind, faction));
                                 try
                                 {
-                                    var pos = tilesToSpawnPawnsOnThem.Where(x => map.thingGrid.ThingsListAt(x)
+                                    var pos = factionCells.Where(x => map.thingGrid.ThingsListAt(x)
                                     .Where(y => y is Building).Count() == 0).RandomElement();
                                     GenSpawn.Spawn(settler, pos, map);
                                 }
@@ -720,6 +713,33 @@ namespace EncounterFramework
             }
             return null;
         }
+        public static HashSet<IntVec3> GetFactionCells(Map map, LocationDef locationDef, List<Thing> things, out IntVec3 offset)
+        {
+            var factionCells = new HashSet<IntVec3>();
+            foreach (var t in things)
+            {
+                if (t.Faction != null)
+                {
+                    CellRect cellRect = new CellRect(t.Position.x - t.RotatedSize.x / 2 - 4, t.Position.z - t.RotatedSize.z / 2 - 4, t.RotatedSize.x + 8, t.RotatedSize.z + 8);
+                    cellRect.ClipInsideMap(map);
+                    foreach (var cell in cellRect.Cells)
+                    {
+                        factionCells.Add(cell);
+                    }
+                }
+            }
+
+            var centerCell = GetCellCenterFor(factionCells);
+            offset = map.Center - centerCell;
+            var factionCells2 = new HashSet<IntVec3>();
+            foreach (var cell in factionCells)
+            {
+                var position = GetOffsetPosition(locationDef, cell, offset);
+                factionCells2.Add(position);
+            }
+            return factionCells2;
+        }
+
         private static bool CanBeTransferred(Thing thing)
         {
             if (thing?.def?.category == ThingCategory.Item)

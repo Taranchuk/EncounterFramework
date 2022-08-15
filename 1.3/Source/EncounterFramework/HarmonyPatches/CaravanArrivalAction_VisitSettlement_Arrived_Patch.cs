@@ -17,7 +17,7 @@ namespace EncounterFramework
             if (!___settlement.HasMap)
             {
                 var filePreset = Utils.GetPresetFor(___settlement, out LocationDef locationDef);
-                Log.Message(___settlement + " - " + locationDef);
+                Log.Message(filePreset + " - " + ___settlement + " - " + locationDef);
                 if (filePreset != null)
                 {
                     GenerationContext.customSettlementGeneration = true;
