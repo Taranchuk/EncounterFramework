@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3C7DF266-AEB0-4A52-A422-AC1C42D9BA5F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EncounterFramework</RootNamespace>
+    <AssemblyName>EncounterFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Assemblies\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ContentSaver.cs" />
+    <Compile Include="Comps\CompLootContainer.cs" />
+    <Compile Include="Comps\CompWaveGenerator.cs" />
+    <Compile Include="Comps\HotSwappableAttribute.cs" />
+    <Compile Include="ContentSaver_SaveEverything.cs" />
+    <Compile Include="HarmonyPatches\GetOrGenerateMapUtility_GetOrGenerateMap_Patch.cs" />
+    <Compile Include="HarmonyPatches\Log_Warning_Patch.cs" />
+    <Compile Include="HarmonyPatches\Patch_Site_CheckAllEnemiesDefeated.cs" />
+    <Compile Include="ContentSaver_SaveFromHomeMap.cs" />
+    <Compile Include="HarmonyPatches\Log_Error_Patch.cs" />
+    <Compile Include="Waves\Dialog_SaveWaveSettings.cs" />
+    <Compile Include="Waves\Dialog_WaveSettingsList.cs" />
+    <Compile Include="Waves\IOUtils.cs" />
+    <Compile Include="Waves\PawnKindSaveable.cs" />
+    <Compile Include="Waves\UIUtils.cs" />
+    <Compile Include="Waves\WaveHolder.cs" />
+    <Compile Include="Waves\Window_MakePawnTemplate.cs" />
+    <Compile Include="Waves\Window_NewWaveName.cs" />
+    <Compile Include="Waves\Window_AdvancedFloatMenu.cs" />
+    <Compile Include="Waves\PawnData.cs" />
+    <Compile Include="Waves\Wave.cs" />
+    <Compile Include="Waves\Window_ImportExistingPawn.cs" />
+    <Compile Include="Waves\Window_ChoosePawnOptions.cs" />
+    <Compile Include="Waves\Window_SelectRace.cs" />
+    <Compile Include="Waves\Window_WaveDesigner.cs" />
+    <Compile Include="Waves\Window_WaveDesigner_Options.cs" />
+    <Compile Include="HarmonyPatches\CaravanArrivalAction_VisitSettlement_Arrived_Patch.cs" />
+    <Compile Include="HarmonyPatches\CaravanArrivalAction_VisitSite_Arrived_Patch.cs" />
+    <Compile Include="HarmonyPatches\MapGenerator_GenerateMap_Patch.cs" />
+    <Compile Include="GenerationContext.cs" />
+    <Compile Include="HarmonyPatches\ShortHashGiver_GiveShortHash_Patch.cs" />
+    <Compile Include="EncounterFrameworkMod.cs" />
+    <Compile Include="HarmonyPatches\Patch_TryFindSpawnCell.cs" />
+    <Compile Include="HarmonyPatches\SymbolResolver_Settlement_Resolve.cs" />
+    <Compile Include="UI\DebugActions.cs" />
+    <Compile Include="UI\Dialog_MakeBlueprintFromHomeMap.cs" />
+    <Compile Include="UI\Dialog_SaveEverything.cs" />
+    <Compile Include="GenStep_LocationGeneration.cs" />
+    <Compile Include="LocationData.cs" />
+    <Compile Include="LootGenerator.cs" />
+    <Compile Include="LootOption.cs" />
+    <Compile Include="LootTable.cs" />
+    <Compile Include="ThingSetMaker_DungeonRewardGenerator.cs" />
+    <Compile Include="QuestNode_SetMapSize.cs" />
+    <Compile Include="Building_TreasureChest.cs" />
+    <Compile Include="SitePartWorker_Location.cs" />
+    <Compile Include="LocationDef.cs" />
+    <Compile Include="MapComponentGeneration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HarmonyPatches\SettlementUtility_AttackNow_Patch.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="SettlementOptionModExtension.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Krafs.Publicizer">
+      <Version>2.0.1</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Krafs.Rimworld.Ref">
+      <Version>1.4.3535</Version>
+    </PackageReference>
+    <PackageReference Include="Lib.Harmony">
+      <Version>2.2.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Publicize Include="Assembly-CSharp" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
