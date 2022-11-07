@@ -245,7 +245,7 @@ namespace EncounterFramework
                 }
 
                 HashSet<IntVec3> factionCells = GetFactionCells(map, locationData.locationDef, buildings.Cast<Thing>().ToList(), out IntVec3 offset);
-                mapComp.factionCells = factionCells;
+
                 if (corpses != null && corpses.Count > 0)
                 {
                     foreach (var corpse in corpses)
@@ -325,7 +325,7 @@ namespace EncounterFramework
                         }
                     }
                 }
-
+                HashSet<IntVec3> cellsWithSpawnedThings = new HashSet<IntVec3>();
                 if (buildings != null && buildings.Count > 0)
                 {
                     foreach (var building in buildings)
@@ -408,6 +408,7 @@ namespace EncounterFramework
                                 {
                                     building.SetFaction(faction);
                                 }
+                                cellsWithSpawnedThings.Add(position);
                             }
                         }
                         catch (Exception ex)
@@ -469,6 +470,7 @@ namespace EncounterFramework
                                 {
                                     TryDistributeTo(thing, map, containers, faction != Faction.OfPlayer);
                                 }
+                                cellsWithSpawnedThings.Add(position);
                             }
                         }
                         catch (Exception ex)
@@ -631,6 +633,7 @@ namespace EncounterFramework
                 }
 
                 var locationCells = factionCells.ToHashSet();
+                locationCells.AddRange(cellsWithSpawnedThings);
                 if (locationData.locationDef.lootGenerator != null)
                 {
                     var treasureCount = locationData.locationDef.lootGenerator.treasureChestCount.RandomInRange;
@@ -647,18 +650,17 @@ namespace EncounterFramework
                 }
                 if (locationData.locationDef.threatGenerator != null)
                 {
-                    List<Pawn> inhabitants = new List<Pawn>();
                     foreach (var threatOption in locationData.locationDef.threatGenerator.options)
                     {
                         if (Rand.Chance(threatOption.chance))
                         {
-                            SpawnPawns(map, locationCells, threatOption, inhabitants);
+                            SpawnPawns(map, locationCells, threatOption);
                         }
                     }
                     if (locationData.locationDef.threatGenerator.optionsOneOfAll != null
                         && locationData.locationDef.threatGenerator.optionsOneOfAll.TryRandomElementByWeight(x => x.chance, out var threatOption2))
                     {
-                        SpawnPawns(map, locationCells, threatOption2, inhabitants);
+                        SpawnPawns(map, locationCells, threatOption2);
                     }
                 }
 
@@ -855,56 +857,51 @@ namespace EncounterFramework
             }
             return numRemoved;
         }
-        private static void SpawnPawns(Map map, HashSet<IntVec3> locationCells, ThreatOption threatOption, List<Pawn> inhabitants)
+        private static void SpawnPawns(Map map, HashSet<IntVec3> locationCells, ThreatOption threatOption)
         {
+            List<Pawn> inhabitants = new List<Pawn>();
+            Faction faction;
+            if (threatOption.defaultFaction != null)
+            {
+                faction = Find.FactionManager.FirstFactionOfDef(threatOption.defaultFaction);
+                if (faction is null)
+                {
+                    faction = FactionGenerator.NewGeneratedFaction(new FactionGeneratorParms
+                    {
+                        factionDef = threatOption.defaultFaction,
+                        hidden = threatOption.defaultFaction.hidden
+                    });
+                    Find.FactionManager.Add(faction);
+                }
+            }
+            else
+            {
+                faction = map.ParentFaction;
+            }
+            if (faction is null)
+            {
+                faction = Find.FactionManager.RandomEnemyFaction();
+            }
+
             if (threatOption.pawnGroupMaker != null)
             {
                 PawnGroupMakerParms pawnGroupMakerParms = new PawnGroupMakerParms();
                 pawnGroupMakerParms.groupKind = threatOption.pawnGroupMaker.kindDef;
                 pawnGroupMakerParms.tile = map.Tile;
-                if (threatOption.defaultFaction != null)
-                {
-                    pawnGroupMakerParms.faction = Find.FactionManager.FirstFactionOfDef(threatOption.defaultFaction);
-                    if (pawnGroupMakerParms.faction is null)
-                    {
-                        pawnGroupMakerParms.faction = FactionGenerator.NewGeneratedFaction(new FactionGeneratorParms
-                        {
-                            factionDef = threatOption.defaultFaction,
-                            hidden = threatOption.defaultFaction.hidden
-                        });
-                        Find.FactionManager.Add(pawnGroupMakerParms.faction);
-                    }
-                }
-                else
-                {
-                    pawnGroupMakerParms.faction = map.ParentFaction;
-                }
-
-                if (pawnGroupMakerParms.faction is null)
-                {
-                    pawnGroupMakerParms.faction = Find.FactionManager.RandomEnemyFaction();
-                }
-
+                pawnGroupMakerParms.faction = faction;
                 pawnGroupMakerParms.points = threatOption.combatPoints.RandomInRange;
                 inhabitants.AddRange(threatOption.pawnGroupMaker.GeneratePawns(pawnGroupMakerParms));
-                foreach (var pawn in inhabitants)
+            }
+
+            if (threatOption.pawnsToSpawn != null)
+            {
+                foreach (var pawnOption in threatOption.pawnsToSpawn)
                 {
-                    if (FindInhabitantSpawnLoc(threatOption, pawn, locationCells, map, out IntVec3 cellToSpawn))
+                    var amount = pawnOption.amount.RandomInRange;
+                    for (var i = 0; i < amount; i++)
                     {
-                        if (threatOption.lordJob != null)
-                        {
-                            LordJob lordJob;
-                            if (threatOption.lordJob == typeof(LordJob_DefendPoint))
-                            {
-                                lordJob = Activator.CreateInstance(threatOption.lordJob, cellToSpawn, 12f, false, false) as LordJob_DefendPoint;
-                            }
-                            else
-                            {
-                                lordJob = Activator.CreateInstance(threatOption.lordJob) as LordJob;
-                            }
-                            LordMaker.MakeNewLord(pawnGroupMakerParms.faction, lordJob, map, Gen.YieldSingle<Pawn>(pawn));
-                        }
-                        GenSpawn.Spawn(pawn, cellToSpawn, map);
+                        var pawn = PawnGenerator.GeneratePawn(pawnOption.kind, faction);
+                        inhabitants.Add(pawn);
                     }
                 }
             }
@@ -924,6 +921,27 @@ namespace EncounterFramework
                             animals[i].mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.ManhunterPermanent);
                         }
                     }
+                }
+            }
+
+            foreach (var pawn in inhabitants)
+            {
+                if (FindInhabitantSpawnLoc(threatOption, pawn, locationCells, map, out IntVec3 cellToSpawn))
+                {
+                    if (threatOption.lordJob != null)
+                    {
+                        LordJob lordJob;
+                        if (threatOption.lordJob == typeof(LordJob_DefendPoint))
+                        {
+                            lordJob = Activator.CreateInstance(threatOption.lordJob, cellToSpawn, 12f, false, false) as LordJob_DefendPoint;
+                        }
+                        else
+                        {
+                            lordJob = Activator.CreateInstance(threatOption.lordJob) as LordJob;
+                        }
+                        LordMaker.MakeNewLord(faction, lordJob, map, Gen.YieldSingle<Pawn>(pawn));
+                    }
+                    GenSpawn.Spawn(pawn, cellToSpawn, map);
                 }
             }
 

@@ -56,13 +56,6 @@ namespace EncounterFramework
         }
         public int refogCount = 0;
         public bool refog = false;
-
-        public HashSet<IntVec3> factionCells = new HashSet<IntVec3>();
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Collections.Look(ref factionCells, "factionCells", LookMode.Value);
-        }
     }
 }
 

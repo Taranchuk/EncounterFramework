@@ -3,14 +3,28 @@ using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using Verse;
 
 namespace EncounterFramework
 {
+    public class PawnAmountOption
+    {
+        public PawnKindDef kind;
+
+        public IntRange amount;
+        public void LoadDataFromXmlCustom(XmlNode xmlRoot)
+        {
+            DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "kind", xmlRoot.Name);
+            amount = ParseHelper.FromString<IntRange>(xmlRoot.FirstChild.Value);
+        }
+    }
+
     public class ThreatOption
     {
         public bool manhunterAnimals;
         public PawnGroupMaker pawnGroupMaker;
+        public List<PawnAmountOption> pawnsToSpawn;
         public FloatRange combatPoints;
         public FloatRange manhuntPoints;
         public bool indoorsOnly;
