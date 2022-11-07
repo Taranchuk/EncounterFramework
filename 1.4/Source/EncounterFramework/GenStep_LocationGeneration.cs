@@ -14,7 +14,7 @@ namespace EncounterFramework
     public class GenStep_LocationGeneration : GenStep
     {
         public LocationDef locationDef;
-        public override int SeedPart => 341641510;
+        public override int SeedPart => locationDef.seedGeneration;
         public override void Generate(Map map, GenStepParams parms)
         {
             var filePreset = Utils.GetPresetFor(map.Parent, locationDef);

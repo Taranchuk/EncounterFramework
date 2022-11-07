@@ -85,10 +85,10 @@ namespace EncounterFramework
 
         public static IntVec3 GetCellCenterFor(HashSet<IntVec3> cells)
         {
-            var x_Averages = cells.OrderBy(x => x.x);
-            var x_average = x_Averages.ElementAt(x_Averages.Count() / 2).x;
-            var z_Averages = cells.OrderBy(x => x.z);
-            var z_average = z_Averages.ElementAt(z_Averages.Count() / 2).z;
+            var x_Averages = cells.OrderBy(x => x.x).ToList();
+            var z_Averages = cells.OrderBy(x => x.z).ToList();
+            var x_average = x_Averages.ElementAt((x_Averages.Count - 1) / 2).x;
+            var z_average = z_Averages.ElementAt((z_Averages.Count - 1) / 2).z;
             var middleCell = new IntVec3(x_average, 0, z_average);
             return middleCell;
         }
@@ -718,6 +718,7 @@ namespace EncounterFramework
             var factionCells = new HashSet<IntVec3>();
             foreach (var t in things)
             {
+
                 if (t.Faction != null)
                 {
                     CellRect cellRect = new CellRect(t.Position.x - t.RotatedSize.x / 2 - 4, t.Position.z - t.RotatedSize.z / 2 - 4, t.RotatedSize.x + 8, t.RotatedSize.z + 8);
@@ -728,16 +729,20 @@ namespace EncounterFramework
                     }
                 }
             }
-
-            var centerCell = GetCellCenterFor(factionCells);
-            offset = map.Center - centerCell;
-            var factionCells2 = new HashSet<IntVec3>();
-            foreach (var cell in factionCells)
+            if (factionCells.Any())
             {
-                var position = GetOffsetPosition(locationDef, cell, offset);
-                factionCells2.Add(position);
+                var centerCell = GetCellCenterFor(factionCells);
+                offset = map.Center - centerCell;
+                var factionCells2 = new HashSet<IntVec3>();
+                foreach (var cell in factionCells)
+                {
+                    var position = GetOffsetPosition(locationDef, cell, offset);
+                    factionCells2.Add(position);
+                }
+                return factionCells2;
             }
-            return factionCells2;
+            offset = new IntVec3(0, 0, 0);
+            return factionCells;
         }
 
         private static bool CanBeTransferred(Thing thing)

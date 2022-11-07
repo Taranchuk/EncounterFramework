@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using RimWorld.Planet;
 using Verse;
@@ -16,6 +17,16 @@ namespace EncounterFramework
             {
                 mapSize = worldComp.tileSizes[parent.Tile];
                 worldComp.tileSizes.Remove(parent.Tile);
+            }
+            if (extraGenStepDefs != null)
+            {
+                foreach (var genStep in extraGenStepDefs)
+                {
+                    if (genStep.def.genStep is GenStep_LocationGeneration locationGeneration && locationGeneration.locationDef.mapSize.HasValue)
+                    {
+                        mapSize = locationGeneration.locationDef.mapSize.Value;
+                    }
+                }
             }
         }
     }

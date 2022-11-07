@@ -35,10 +35,10 @@ namespace EncounterFramework
         public LootGenerator lootGenerator;
 
         public ThreatGenerator threatGenerator;
-        public override void PostLoad()
-        {
-            base.PostLoad();
-        }
+
+        public int seedGeneration;
+
+        public IntVec3? mapSize;
     }
 }
 
