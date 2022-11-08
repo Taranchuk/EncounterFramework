@@ -246,6 +246,99 @@ namespace EncounterFramework
 
                 HashSet<IntVec3> factionCells = GetFactionCells(map, locationData.locationDef, buildings.Cast<Thing>().ToList(), out IntVec3 offset);
 
+                if (terrains != null && terrains.Count > 0)
+                {
+                    HashSet<IntVec3> terrainCells = new HashSet<IntVec3>();
+                    foreach (var terrain in terrains)
+                    {
+                        try
+                        {
+                            var position = GetOffsetPosition(locationData.locationDef, terrain.Key, offset);
+                            if (GenGrid.InBounds(position, map))
+                            {
+                                var terrainDef = terrain.Value;
+                                if (terrainDef != null)
+                                {
+                                    map.terrainGrid.SetTerrain(position, terrainDef);
+                                    terrainCells.Add(position);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("8 Error in map generating, cant spawn " + terrain.Key + " - " + ex);
+                        }
+                    }
+
+                    foreach (var terrain in terrains)
+                    {
+                        try
+                        {
+                            var position = GetOffsetPosition(locationData.locationDef, terrain.Key, offset);
+                            if (GenGrid.InBounds(position, map))
+                            {
+                                var terrainDef = terrain.Value;
+                                if (terrainDef is null)
+                                {
+                                    terrainDef = position.GetRoom(map).Cells.Select(x => x.GetTerrain(map)).GroupBy(x => x)
+                                        .OrderByDescending(x => x.Count()).First().Key;
+                                    if (terrainDef.IsSoil)
+                                    {
+                                        terrainDef = GenRadial.RadialCellsAround(position, 15f, true).Select(x => x.GetTerrain(map)).GroupBy(x => x)
+                                        .OrderByDescending(x => x.Count()).First().Key;
+                                    }
+                                    map.terrainGrid.SetTerrain(position, terrainDef);
+                                    terrainCells.Add(position);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("8 Error in map generating, cant spawn " + terrain.Key + " - " + ex);
+                        }
+                    }
+
+
+                    foreach (var cell in terrainCells)
+                    {
+                        var tmpThings = cell.GetThingList(map);
+                        for (int i = tmpThings.Count - 1; i >= 0; i--)
+                        {
+                            try
+                            {
+                                if (tmpThings[i].Spawned)
+                                {
+                                    tmpThings[i].DeSpawn(DestroyMode.WillReplace);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error("4 Cant despawn: " + tmpThings[i] + " - "
+                                    + tmpThings[i].Position + "error: " + ex);
+                            }
+                        }
+                    }
+                }
+                if (roofs != null && roofs.Count > 0)
+                {
+                    foreach (var roof in roofs)
+                    {
+                        try
+                        {
+                            var position = GetOffsetPosition(locationData.locationDef, roof.Key, offset);
+                            if (GenGrid.InBounds(position, map))
+                            {
+                                map.roofGrid.SetRoof(position, roof.Value);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("9 Error in map generating, cant spawn " + roof.Key + " - " + ex);
+                        }
+                    }
+                }
+
+
                 if (corpses != null && corpses.Count > 0)
                 {
                     foreach (var corpse in corpses)
@@ -490,74 +583,6 @@ namespace EncounterFramework
                     }
                 }
 
-                if (terrains != null && terrains.Count > 0)
-                {
-                    foreach (var terrain in terrains)
-                    {
-                        try
-                        {
-                            var position = GetOffsetPosition(locationData.locationDef, terrain.Key, offset);
-                            if (GenGrid.InBounds(position, map))
-                            {
-                                var terrainDef = terrain.Value;
-                                if (terrainDef != null)
-                                {
-                                    map.terrainGrid.SetTerrain(position, terrainDef);
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error("8 Error in map generating, cant spawn " + terrain.Key + " - " + ex);
-                        }
-                    }
-
-                    foreach (var terrain in terrains)
-                    {
-                        try
-                        {
-                            var position = GetOffsetPosition(locationData.locationDef, terrain.Key, offset);
-                            if (GenGrid.InBounds(position, map))
-                            {
-                                var terrainDef = terrain.Value;
-                                if (terrainDef is null)
-                                {
-                                    terrainDef = position.GetRoom(map).Cells.Select(x => x.GetTerrain(map)).GroupBy(x => x)
-                                        .OrderByDescending(x => x.Count()).First().Key;
-                                    if (terrainDef.IsSoil)
-                                    {
-                                        terrainDef = GenRadial.RadialCellsAround(position, 15f, true).Select(x => x.GetTerrain(map)).GroupBy(x => x)
-                                        .OrderByDescending(x => x.Count()).First().Key;
-                                    }
-                                    map.terrainGrid.SetTerrain(position, terrainDef);
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error("8 Error in map generating, cant spawn " + terrain.Key + " - " + ex);
-                        }
-                    }
-                }
-                if (roofs != null && roofs.Count > 0)
-                {
-                    foreach (var roof in roofs)
-                    {
-                        try
-                        {
-                            var position = GetOffsetPosition(locationData.locationDef, roof.Key, offset);
-                            if (GenGrid.InBounds(position, map))
-                            {
-                                map.roofGrid.SetRoof(position, roof.Value);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error("9 Error in map generating, cant spawn " + roof.Key + " - " + ex);
-                        }
-                    }
-                }
-
                 if (locationData.locationDef.additionalGenStepDefs?.Any() ?? false)
                 {
                     Rand.PushState();
@@ -680,16 +705,19 @@ namespace EncounterFramework
                         {
                             foreach (var i in Enumerable.Range(1, (int)pawn.selectionWeight))
                             {
-                                var settler = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pawn.kind, faction));
-                                try
+                                var settler = Utils.GeneratePawn(pawn.kind, faction);
+                                if (settler != null)
                                 {
-                                    var pos = factionCells.Where(x => map.thingGrid.ThingsListAt(x)
-                                    .Where(y => y is Building).Count() == 0).RandomElement();
-                                    GenSpawn.Spawn(settler, pos, map);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Log.Error("10 Error in map generating, cant spawn " + settler + " - " + ex);
+                                    try
+                                    {
+                                        var pos = factionCells.Where(x => map.thingGrid.ThingsListAt(x)
+                                        .Where(y => y is Building).Count() == 0).RandomElement();
+                                        GenSpawn.Spawn(settler, pos, map);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Log.Error("10 Error in map generating, cant spawn " + settler + " - " + ex);
+                                    }
                                 }
                             }
                         }
@@ -900,8 +928,11 @@ namespace EncounterFramework
                     var amount = pawnOption.amount.RandomInRange;
                     for (var i = 0; i < amount; i++)
                     {
-                        var pawn = PawnGenerator.GeneratePawn(pawnOption.kind, faction);
-                        inhabitants.Add(pawn);
+                        var pawn = Utils.GeneratePawn(pawnOption.kind, faction);
+                        if (pawn != null)
+                        {
+                            inhabitants.Add(pawn);
+                        }
                     }
                 }
             }
@@ -1105,6 +1136,27 @@ namespace EncounterFramework
                     }
                 }
             }
+        }
+
+        public static Pawn GeneratePawn(PawnKindDef kind, Faction faction)
+        {
+            int count = 0;
+            while (count < 100)
+            {
+                try
+                {
+                    var pawn = PawnGenerator.GeneratePawn(kind, faction);
+                    if (pawn != null)
+                    {
+                        return pawn;
+                    }
+                }
+                catch (Exception e)
+                {
+                }
+                count++;
+            }
+            return null;
         }
 
         public static List<IntVec3> terrainKeys = new List<IntVec3>();

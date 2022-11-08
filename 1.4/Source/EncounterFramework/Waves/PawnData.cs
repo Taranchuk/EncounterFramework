@@ -32,7 +32,7 @@ namespace EncounterFramework
                 return pawn;
             }
             pawnKindDef.apparelTags?.Add("DummyJustToOverride");
-            var newPawn = PawnGenerator.GeneratePawn(pawnKindDef, faction);
+            var newPawn = Utils.GeneratePawn(pawnKindDef, faction);
             pawnKindDef.apparelTags?.Remove("DummyJustToOverride");
             if (requiredWeapons != null)
             {
