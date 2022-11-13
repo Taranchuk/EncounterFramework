@@ -25,6 +25,8 @@ namespace EncounterFramework
         public bool manhunterAnimals;
         public PawnGroupMaker pawnGroupMaker;
         public List<PawnAmountOption> pawnsToSpawn;
+        public PawnsArrivalModeDef arrivalMode;
+        public RaidStrategyDef raidStrategy;
         public FloatRange combatPoints;
         public FloatRange manhuntPoints;
         public bool indoorsOnly;
@@ -36,11 +38,7 @@ namespace EncounterFramework
         public string letterTitle;
         public string letterDescription;
     }
-    public class ThreatGenerator
-    {
-        public List<ThreatOption> options;
-        public List<ThreatOption> optionsOneOfAll;
-    }
+
     public class LocationData
     {
         public LocationDef locationDef;

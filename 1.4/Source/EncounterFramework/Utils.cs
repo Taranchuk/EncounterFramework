@@ -10,6 +10,7 @@ using Verse.AI.Group;
 
 namespace EncounterFramework
 {
+    [HotSwappable]
     public static class Utils
     {
         public static LocationDef GetLocationDefForMapParent(MapParent mapParent)
@@ -244,7 +245,79 @@ namespace EncounterFramework
                     DoPawnCleanup(corpse.InnerPawn, faction);
                 }
 
-                HashSet<IntVec3> factionCells = GetFactionCells(map, locationData.locationDef, buildings.Cast<Thing>().ToList(), out IntVec3 offset);
+                HashSet<IntVec3> factionCells = GetFactionCells(map, locationData.locationDef, buildings.Cast<Thing>().ToList(), 
+                    out IntVec3 offset);
+
+                if (buildings != null && buildings.Count > 0)
+                {
+                    foreach (var building in buildings)
+                    {
+                        var position = GetOffsetPosition(locationData.locationDef, building.Position, offset);
+                        foreach (var pos in GenRadial.RadialCellsAround(position, radiusToClear, true))
+                        {
+                            if (GenGrid.InBounds(pos, map))
+                            {
+                                tilesToProcess.Add(pos);
+                            }
+                        }
+                    }
+                    if (tilesToProcess != null && tilesToProcess.Count > 0)
+                    {
+                        foreach (var pos in tilesToProcess)
+                        {
+                            if (pos.InBounds(map))
+                            {
+                                var things2 = map.thingGrid.ThingsListAt(pos);
+                                foreach (var thing in things2)
+                                {
+                                    if (thing is Building || (thing is Plant plant && plant.def != ThingDefOf.Plant_Grass) || IsChunk(thing))
+                                    {
+                                        thingsToDestroy.Add(thing);
+                                    }
+                                }
+                                var terrain = pos.GetTerrain(map);
+
+                                if (terrain != null)
+                                {
+                                    if (terrain.IsWater)
+                                    {
+                                        map.terrainGrid.SetTerrain(pos, TerrainDefOf.Soil);
+                                    }
+                                    if (map.terrainGrid.CanRemoveTopLayerAt(pos))
+                                    {
+                                        map.terrainGrid.RemoveTopLayer(pos, false);
+                                    }
+
+                                }
+                                var roof = pos.GetRoof(map);
+                                if (roof != null && (!map.roofGrid.RoofAt(pos).isNatural || map.roofGrid.RoofAt(pos) == RoofDefOf.RoofRockThin))
+                                {
+                                    map.roofGrid.SetRoof(pos, null);
+                                }
+                            }
+
+                        }
+                    }
+
+                    if (thingsToDestroy != null && thingsToDestroy.Count > 0)
+                    {
+                        for (int i = thingsToDestroy.Count - 1; i >= 0; i--)
+                        {
+                            try
+                            {
+                                if (thingsToDestroy[i].Spawned)
+                                {
+                                    thingsToDestroy[i].DeSpawn(DestroyMode.WillReplace);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error("4 Cant despawn: " + thingsToDestroy[i] + " - "
+                                    + thingsToDestroy[i].Position + "error: " + ex);
+                            }
+                        }
+                    }
+                }
 
                 if (terrains != null && terrains.Count > 0)
                 {
@@ -287,9 +360,9 @@ namespace EncounterFramework
                                         terrainDef = GenRadial.RadialCellsAround(position, 15f, true).Select(x => x.GetTerrain(map)).GroupBy(x => x)
                                         .OrderByDescending(x => x.Count()).First().Key;
                                     }
-                                    map.terrainGrid.SetTerrain(position, terrainDef);
-                                    terrainCells.Add(position);
                                 }
+                                map.terrainGrid.SetTerrain(position, terrainDef);
+                                terrainCells.Add(position);
                             }
                         }
                         catch (Exception ex)
@@ -424,74 +497,6 @@ namespace EncounterFramework
                     foreach (var building in buildings)
                     {
                         var position = GetOffsetPosition(locationData.locationDef, building.Position, offset);
-                        foreach (var pos in GenRadial.RadialCellsAround(position, radiusToClear, true))
-                        {
-                            if (GenGrid.InBounds(pos, map))
-                            {
-                                tilesToProcess.Add(pos);
-                            }
-                        }
-                    }
-                    if (tilesToProcess != null && tilesToProcess.Count > 0)
-                    {
-                        foreach (var pos in tilesToProcess)
-                        {
-                            if (pos.InBounds(map))
-                            {
-                                var things2 = map.thingGrid.ThingsListAt(pos);
-                                foreach (var thing in things2)
-                                {
-                                    if (thing is Building || (thing is Plant plant && plant.def != ThingDefOf.Plant_Grass) || IsChunk(thing))
-                                    {
-                                        thingsToDestroy.Add(thing);
-                                    }
-                                }
-                                var terrain = pos.GetTerrain(map);
-
-                                if (terrain != null)
-                                {
-                                    if (terrain.IsWater)
-                                    {
-                                        map.terrainGrid.SetTerrain(pos, TerrainDefOf.Soil);
-                                    }
-                                    if (map.terrainGrid.CanRemoveTopLayerAt(pos))
-                                    {
-                                        map.terrainGrid.RemoveTopLayer(pos, false);
-                                    }
-
-                                }
-                                var roof = pos.GetRoof(map);
-                                if (roof != null && (!map.roofGrid.RoofAt(pos).isNatural || map.roofGrid.RoofAt(pos) == RoofDefOf.RoofRockThin))
-                                {
-                                    map.roofGrid.SetRoof(pos, null);
-                                }
-                            }
-
-                        }
-                    }
-
-                    if (thingsToDestroy != null && thingsToDestroy.Count > 0)
-                    {
-                        for (int i = thingsToDestroy.Count - 1; i >= 0; i--)
-                        {
-                            try
-                            {
-                                if (thingsToDestroy[i].Spawned)
-                                {
-                                    thingsToDestroy[i].DeSpawn(DestroyMode.WillReplace);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Log.Error("4 Cant despawn: " + thingsToDestroy[i] + " - "
-                                    + thingsToDestroy[i].Position + "error: " + ex);
-                            }
-                        }
-                    }
-
-                    foreach (var building in buildings)
-                    {
-                        var position = GetOffsetPosition(locationData.locationDef, building.Position, offset);
                         try
                         {
                             if (GenGrid.InBounds(position, map))
@@ -510,6 +515,7 @@ namespace EncounterFramework
                         }
                     }
                 }
+
                 if (filths != null && filths.Count > 0)
                 {
                     foreach (var filth in filths)
@@ -659,34 +665,15 @@ namespace EncounterFramework
 
                 var locationCells = factionCells.ToHashSet();
                 locationCells.AddRange(cellsWithSpawnedThings);
+                var locationCellsAsList = locationCells.ToList();
                 if (locationData.locationDef.lootGenerator != null)
                 {
-                    var treasureCount = locationData.locationDef.lootGenerator.treasureChestCount.RandomInRange;
-                    for (var i = 0; i < treasureCount; i++)
-                    {
-                        var treasureChestDef = locationData.locationDef.lootGenerator.treasureChests.RandomElementByWeight(x => x.weight).thing;
-                        var treasureChest = ThingMaker.MakeThing(treasureChestDef) as Building_TreasureChest;
-
-                        if (FindChestTreasureSpawnLoc(locationData, treasureChest, locationCells, map, out IntVec3 cellToSpawn, out Rot4 rot))
-                        {
-                            GenPlace.TryPlaceThing(treasureChest, cellToSpawn, map, ThingPlaceMode.Direct, null, null, rot);
-                        }
-                    }
+                    locationData.locationDef.lootGenerator.GenerateLoot(map, locationCellsAsList);
                 }
+
                 if (locationData.locationDef.threatGenerator != null)
                 {
-                    foreach (var threatOption in locationData.locationDef.threatGenerator.options)
-                    {
-                        if (Rand.Chance(threatOption.chance))
-                        {
-                            SpawnPawns(map, locationCells, threatOption);
-                        }
-                    }
-                    if (locationData.locationDef.threatGenerator.optionsOneOfAll != null
-                        && locationData.locationDef.threatGenerator.optionsOneOfAll.TryRandomElementByWeight(x => x.chance, out var threatOption2))
-                    {
-                        SpawnPawns(map, locationCells, threatOption2);
-                    }
+                    locationData.locationDef.threatGenerator.GenerateThreat(map, locationCellsAsList);
                 }
 
                 if (faction.def.HasModExtension<SettlementOptionModExtension>())
@@ -748,11 +735,9 @@ namespace EncounterFramework
             var factionCells = new HashSet<IntVec3>();
             foreach (var t in things)
             {
-
-                if (t.Faction != null)
+                if (t.def.CanHaveFaction)
                 {
-                    CellRect cellRect = new CellRect(t.Position.x - t.RotatedSize.x / 2 - 4, t.Position.z - t.RotatedSize.z / 2 - 4, t.RotatedSize.x + 8, t.RotatedSize.z + 8);
-                    cellRect.ClipInsideMap(map);
+                    CellRect cellRect = t.OccupiedRect();
                     foreach (var cell in cellRect.Cells)
                     {
                         factionCells.Add(cell);
@@ -805,7 +790,6 @@ namespace EncounterFramework
             }
             return false;
         }
-
         private static void DoPawnCleanup(Pawn pawn, Faction faction)
         {
             PawnComponentsUtility.CreateInitialComponents(pawn);
@@ -885,192 +869,8 @@ namespace EncounterFramework
             }
             return numRemoved;
         }
-        private static void SpawnPawns(Map map, HashSet<IntVec3> locationCells, ThreatOption threatOption)
-        {
-            List<Pawn> inhabitants = new List<Pawn>();
-            Faction faction;
-            if (threatOption.defaultFaction != null)
-            {
-                faction = Find.FactionManager.FirstFactionOfDef(threatOption.defaultFaction);
-                if (faction is null)
-                {
-                    faction = FactionGenerator.NewGeneratedFaction(new FactionGeneratorParms
-                    {
-                        factionDef = threatOption.defaultFaction,
-                        hidden = threatOption.defaultFaction.hidden
-                    });
-                    Find.FactionManager.Add(faction);
-                }
-            }
-            else
-            {
-                faction = map.ParentFaction;
-            }
-            if (faction is null)
-            {
-                faction = Find.FactionManager.RandomEnemyFaction();
-            }
 
-            if (threatOption.pawnGroupMaker != null)
-            {
-                PawnGroupMakerParms pawnGroupMakerParms = new PawnGroupMakerParms();
-                pawnGroupMakerParms.groupKind = threatOption.pawnGroupMaker.kindDef;
-                pawnGroupMakerParms.tile = map.Tile;
-                pawnGroupMakerParms.faction = faction;
-                pawnGroupMakerParms.points = threatOption.combatPoints.RandomInRange;
-                inhabitants.AddRange(threatOption.pawnGroupMaker.GeneratePawns(pawnGroupMakerParms));
-            }
 
-            if (threatOption.pawnsToSpawn != null)
-            {
-                foreach (var pawnOption in threatOption.pawnsToSpawn)
-                {
-                    var amount = pawnOption.amount.RandomInRange;
-                    for (var i = 0; i < amount; i++)
-                    {
-                        var pawn = Utils.GeneratePawn(pawnOption.kind, faction);
-                        if (pawn != null)
-                        {
-                            inhabitants.Add(pawn);
-                        }
-                    }
-                }
-            }
-
-            if (threatOption.manhunterAnimals)
-            {
-                var points = threatOption.manhuntPoints.RandomInRange;
-                if (ManhunterPackGenStepUtility.TryGetAnimalsKind(points, map.Tile, out var animalKind))
-                {
-                    List<Pawn> animals = ManhunterPackIncidentUtility.GenerateAnimals(animalKind, map.Tile, points);
-                    for (int i = 0; i < animals.Count; i++)
-                    {
-                        if (FindInhabitantSpawnLoc(threatOption, animals[i], locationCells, map, out var spawnLoc))
-                        {
-                            GenSpawn.Spawn(animals[i], spawnLoc, map, Rot4.Random);
-                            animals[i].health.AddHediff(HediffDefOf.Scaria);
-                            animals[i].mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.ManhunterPermanent);
-                        }
-                    }
-                }
-            }
-
-            foreach (var pawn in inhabitants)
-            {
-                if (FindInhabitantSpawnLoc(threatOption, pawn, locationCells, map, out IntVec3 cellToSpawn))
-                {
-                    if (threatOption.lordJob != null)
-                    {
-                        LordJob lordJob;
-                        if (threatOption.lordJob == typeof(LordJob_DefendPoint))
-                        {
-                            lordJob = Activator.CreateInstance(threatOption.lordJob, cellToSpawn, 12f, false, false) as LordJob_DefendPoint;
-                        }
-                        else
-                        {
-                            lordJob = Activator.CreateInstance(threatOption.lordJob) as LordJob;
-                        }
-                        LordMaker.MakeNewLord(faction, lordJob, map, Gen.YieldSingle<Pawn>(pawn));
-                    }
-                    GenSpawn.Spawn(pawn, cellToSpawn, map);
-                }
-            }
-
-            if (threatOption.letterDef != null)
-            {
-                Find.LetterStack.ReceiveLetter(threatOption.letterTitle, threatOption.letterDescription, threatOption.letterDef);
-            }
-        }
-
-        private static readonly Rot4[] Rotations = new Rot4[4]
-        {
-            Rot4.West,
-            Rot4.East,
-            Rot4.North,
-            Rot4.South
-        };
-        private static bool FindChestTreasureSpawnLoc(LocationData locationData, Thing treasureChest, HashSet<IntVec3> cells, Map map, out IntVec3 cellToSpawn, out Rot4 rot)
-        {
-            Predicate<IntVec3> predicate = null;
-            if (locationData.locationDef.lootGenerator.spawnIndoor)
-            {
-                predicate = delegate (IntVec3 x)
-                {
-                    return x.Walkable(map) && x.GetFirstBuilding(map) is null && !x.UsesOutdoorTemperature(map);
-                };
-            }
-            else
-            {
-                predicate = delegate (IntVec3 x)
-                {
-                    return x.Walkable(map) && x.GetFirstBuilding(map) is null;
-                };
-            }
-
-            foreach (var cell in cells.InRandomOrder())
-            {
-                foreach (var curRot in Rotations.InRandomOrder())
-                {
-                    if (treasureChest.def.hasInteractionCell)
-                    {
-                        IntVec3 c = ThingUtility.InteractionCellWhenAt(treasureChest.def, cell, curRot, map);
-                        if (!predicate(c))
-                        {
-                            continue;
-                        }
-                    }
-                    if (GenAdj.OccupiedRect(cell, curRot, treasureChest.def.size).All(x => predicate(x)))
-                    {
-                        cellToSpawn = cell;
-                        rot = curRot;
-                        return true;
-                    }
-                }
-            }
-            cellToSpawn = IntVec3.Invalid;
-            rot = Rot4.Invalid;
-            return false;
-        }
-
-        private static bool FindInhabitantSpawnLoc(ThreatOption threatOption, Pawn pawn, HashSet<IntVec3> cells, Map map, out IntVec3 cellToSpawn)
-        {
-            Predicate<IntVec3> predicate = null;
-            if (threatOption.indoorsOnly)
-            {
-                predicate = delegate (IntVec3 x)
-                {
-                    return x.Walkable(map) && !x.UsesOutdoorTemperature(map);
-                };
-            }
-            else if (threatOption.outdoorsOnly)
-            {
-                predicate = delegate (IntVec3 x)
-                {
-                    return x.Walkable(map) && x.UsesOutdoorTemperature(map);
-                };
-            }
-            else
-            {
-                predicate = delegate (IntVec3 x)
-                {
-                    return x.Walkable(map);
-                };
-            }
-
-            foreach (var cell in cells.InRandomOrder())
-            {
-                if (predicate(cell))
-                {
-                    cellToSpawn = cell;
-                    return true;
-                }
-            }
-            if (cells.Where(x => x.Walkable(map)).TryRandomElement(out cellToSpawn))
-            {
-                return true;
-            }
-            return false;
-        }
         private static int GetSeedPart(MapGeneratorDef def, GenStepDef genStepDef)
         {
             int seedPart = genStepDef.genStep.SeedPart;

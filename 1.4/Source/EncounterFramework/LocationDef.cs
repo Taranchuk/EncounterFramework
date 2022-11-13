@@ -39,6 +39,9 @@ namespace EncounterFramework
         public int seedGeneration;
 
         public IntVec3? mapSize;
+
+        public float? minPawnGroupMakerPoints;
+        public float? pawnGroupMakerPointsFactor;
     }
 }
 

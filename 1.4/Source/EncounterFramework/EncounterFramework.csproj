@@ -52,6 +52,8 @@
     <Compile Include="HarmonyPatches\Patch_Site_CheckAllEnemiesDefeated.cs" />
     <Compile Include="ContentSaver_SaveFromHomeMap.cs" />
     <Compile Include="HarmonyPatches\Log_Error_Patch.cs" />
+    <Compile Include="HarmonyPatches\SymbolResolver_PawnGroup_Resolve_Patch.cs" />
+    <Compile Include="ThreatGenerator.cs" />
     <Compile Include="Waves\Dialog_SaveWaveSettings.cs" />
     <Compile Include="Waves\Dialog_WaveSettingsList.cs" />
     <Compile Include="Waves\IOUtils.cs" />
@@ -101,7 +103,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Krafs.Rimworld.Ref">
-      <Version>1.4.3535</Version>
+      <Version>1.4.3542</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">
       <Version>2.2.2</Version>

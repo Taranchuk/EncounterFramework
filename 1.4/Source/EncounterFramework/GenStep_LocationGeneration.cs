@@ -20,7 +20,7 @@ namespace EncounterFramework
             var filePreset = Utils.GetPresetFor(map.Parent, locationDef);
             if (filePreset != null)
             {
-                GenerationContext.locationData = new LocationData(locationDef, filePreset);
+                GenerationContext.locationData = new LocationData(locationDef, filePreset, map.Parent);
             }
         }
     }
