@@ -54,6 +54,7 @@
     <Compile Include="HarmonyPatches\Log_Error_Patch.cs" />
     <Compile Include="HarmonyPatches\SymbolResolver_PawnGroup_Resolve_Patch.cs" />
     <Compile Include="ThreatGenerator.cs" />
+    <Compile Include="ThreatOption.cs" />
     <Compile Include="Waves\Dialog_SaveWaveSettings.cs" />
     <Compile Include="Waves\Dialog_WaveSettingsList.cs" />
     <Compile Include="Waves\IOUtils.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="HarmonyPatches\CaravanArrivalAction_VisitSite_Arrived_Patch.cs" />
     <Compile Include="HarmonyPatches\MapGenerator_GenerateMap_Patch.cs" />
     <Compile Include="GenerationContext.cs" />
-    <Compile Include="HarmonyPatches\ShortHashGiver_GiveShortHash_Patch.cs" />
     <Compile Include="EncounterFrameworkMod.cs" />
     <Compile Include="HarmonyPatches\Patch_TryFindSpawnCell.cs" />
     <Compile Include="HarmonyPatches\SymbolResolver_Settlement_Resolve.cs" />
@@ -114,4 +114,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy * "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\-RH2-Faction---VOID\1.4\Assemblies"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

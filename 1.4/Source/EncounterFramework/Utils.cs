@@ -959,6 +959,41 @@ namespace EncounterFramework
             return null;
         }
 
+        public static void ChangeRelation(this Faction faction, int baseGoodwill)
+        {
+            if (Faction.OfPlayer.GoodwillWith(faction) != baseGoodwill)
+            {
+                var kind = GetKindFromBaseGoodwill(baseGoodwill);
+                ChangeRelation(faction, kind, baseGoodwill);
+            }
+        }
+        private static void ChangeRelation(this Faction faction, FactionRelationKind factionRelationKind, int baseGoodwill)
+        {
+            var kind = faction.RelationKindWith(Faction.OfPlayer);
+            var factionRelation = faction.RelationWith(Faction.OfPlayer);
+            factionRelation.kind = factionRelationKind;
+            factionRelation.baseGoodwill = baseGoodwill;
+            faction.Notify_RelationKindChanged(Faction.OfPlayer, kind, true, null, default, out _);
+
+            var playerRelation = Faction.OfPlayer.RelationWith(faction);
+            playerRelation.kind = factionRelationKind;
+            playerRelation.baseGoodwill = baseGoodwill;
+            Faction.OfPlayer.Notify_RelationKindChanged(faction, kind, false, null, default, out _);
+        }
+
+        public static FactionRelationKind GetKindFromBaseGoodwill(int baseGoodwill)
+        {
+            if (baseGoodwill <= -75)
+            {
+                return FactionRelationKind.Hostile;
+            }
+            if (baseGoodwill >= 75)
+            {
+                return FactionRelationKind.Ally;
+            }
+            return FactionRelationKind.Neutral;
+        }
+
         public static List<IntVec3> terrainKeys = new List<IntVec3>();
         public static List<TerrainDef> terrainValues = new List<TerrainDef>();
         public static List<IntVec3> roofsKeys = new List<IntVec3>();

@@ -44,14 +44,14 @@ namespace EncounterFramework
 							{
 								var thingDef = lootOption.GetThingDef(lootOption.uniqueThingsOnly ? choosenThingDefs : null);
                                 choosenThingDefs.Add(thingDef);
-                                var thing = ThingMaker.MakeThing(thingDef, GenStuff.RandomStuffFor(thingDef));
 								while (quantityAmount > 0)
                                 {
+                                    var thing = ThingMaker.MakeThing(thingDef, GenStuff.RandomStuffFor(thingDef));
                                     var newStack = Mathf.Min(quantityAmount, thingDef.stackLimit);
                                     quantityAmount -= newStack;
                                     thing.stackCount = newStack;
+								    ProcessThing(thing, lootOption);
                                 }
-								ProcessThing(thing, lootOption);
 							}
 						}
                     }
