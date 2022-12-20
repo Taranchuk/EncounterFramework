@@ -52,6 +52,8 @@
     <Compile Include="HarmonyPatches\Patch_Site_CheckAllEnemiesDefeated.cs" />
     <Compile Include="ContentSaver_SaveFromHomeMap.cs" />
     <Compile Include="HarmonyPatches\Log_Error_Patch.cs" />
+    <Compile Include="HarmonyPatches\RerouteModdedGenStepsGenerate.cs" />
+    <Compile Include="HarmonyPatches\RerouteModdedGenStepsScatterAt.cs" />
     <Compile Include="HarmonyPatches\SymbolResolver_PawnGroup_Resolve_Patch.cs" />
     <Compile Include="ThreatGenerator.cs" />
     <Compile Include="ThreatOption.cs" />
