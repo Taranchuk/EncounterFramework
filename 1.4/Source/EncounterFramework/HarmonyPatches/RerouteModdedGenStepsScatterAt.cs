@@ -28,8 +28,8 @@ namespace EncounterFramework
 
         public static bool Prefix(IntVec3 __0, Map __1, GenStepParams __2, int __3 = 1)
         {
-            var filePreset = Utils.GetPresetFor(__1.Parent, out _);
-            if (filePreset != null)
+            var preset = Utils.GetPresetFor(__1.Parent);
+            if (preset != null)
             {
                 var genStep = new GenStep_Settlement();
                 genStep.ScatterAt(__0, __1, __2, __3);

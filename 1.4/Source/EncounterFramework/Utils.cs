@@ -13,7 +13,56 @@ namespace EncounterFramework
     [HotSwappable]
     public static class Utils
     {
-        public static LocationDef GetLocationDefForMapParent(MapParent mapParent)
+        public static LocationData GetPresetFor(MapParent mapParent, LocationDef locationDef = null)
+        {
+            if (GenerationContext.locationData != null && GenerationContext.locationData.mapParent == mapParent 
+                && (locationDef is null || GenerationContext.locationData.locationDef == locationDef))
+            {
+                return GenerationContext.locationData;
+            }
+            if (locationDef is null)
+            {
+                locationDef = GetLocationDefForMapParent(mapParent);
+            }
+            if (locationDef != null)
+            {
+                var filePreset = GetFilePresetFor(locationDef);
+                if (filePreset != null)
+                {
+                    GenerationContext.locationData = new LocationData(locationDef, filePreset, mapParent);
+                    return GenerationContext.locationData;
+                }
+            }
+            return null;
+        }
+
+        public static FileInfo GetFilePresetFor(LocationDef locationDef)
+        {
+            string path;
+            FileInfo file = null;
+            if (locationDef.filePreset != null && locationDef.filePreset.Length > 0)
+            {
+                path = Path.GetFullPath(locationDef.modContentPack.RootDir + "/" + locationDef.filePreset);
+                file = new FileInfo(path);
+            }
+            else if (locationDef.folderWithPresets != null && locationDef.folderWithPresets.Length > 0)
+            {
+                path = Path.GetFullPath(locationDef.modContentPack.RootDir + "/" + locationDef.folderWithPresets);
+                DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                if (directoryInfo.Exists)
+                {
+                    file = directoryInfo.GetFiles().RandomElement();
+                }
+            }
+
+            if (file != null)
+            {
+                return file;
+            }
+            return null;
+        }
+
+        private static LocationDef GetLocationDefForMapParent(MapParent mapParent)
         {
             if (GenerationContext.locationData?.locationDef != null)
             {
@@ -30,45 +79,6 @@ namespace EncounterFramework
             return null;
         }
 
-        public static FileInfo GetPresetFor(MapParent mapParent, out LocationDef locationDef)
-        {
-            if (GenerationContext.locationData != null && GenerationContext.locationData.mapParent == mapParent)
-            {
-                locationDef = GenerationContext.locationData.locationDef;
-                return GenerationContext.locationData.file;
-            }
-            locationDef = GetLocationDefForMapParent(mapParent);
-            return GetPresetFor(mapParent, locationDef);
-        }
-
-        public static FileInfo GetPresetFor(MapParent mapParent, LocationDef locationDef)
-        {
-            if (locationDef != null)
-            {
-                string path = "";
-                FileInfo file = null;
-                if (locationDef.filePreset != null && locationDef.filePreset.Length > 0)
-                {
-                    path = Path.GetFullPath(locationDef.modContentPack.RootDir + "/" + locationDef.filePreset);
-                    file = new FileInfo(path);
-                }
-                else if (locationDef.folderWithPresets != null && locationDef.folderWithPresets.Length > 0)
-                {
-                    path = Path.GetFullPath(locationDef.modContentPack.RootDir + "/" + locationDef.folderWithPresets);
-                    DirectoryInfo directoryInfo = new DirectoryInfo(path);
-                    if (directoryInfo.Exists)
-                    {
-                        file = directoryInfo.GetFiles().RandomElement();
-                    }
-                }
-
-                if (file != null)
-                {
-                    return file;
-                }
-            }
-            return null;
-        }
         public static bool IsChunk(Thing item)
         {
             if (item?.def?.thingCategories != null)

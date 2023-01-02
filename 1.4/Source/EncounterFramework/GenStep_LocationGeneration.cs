@@ -17,11 +17,7 @@ namespace EncounterFramework
         public override int SeedPart => locationDef.seedGeneration;
         public override void Generate(Map map, GenStepParams parms)
         {
-            var filePreset = Utils.GetPresetFor(map.Parent, locationDef);
-            if (filePreset != null)
-            {
-                GenerationContext.locationData = new LocationData(locationDef, filePreset, map.Parent);
-            }
+            GenerationContext.locationData = Utils.GetPresetFor(map.Parent, locationDef);
         }
     }
 }

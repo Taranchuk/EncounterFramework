@@ -30,8 +30,8 @@ namespace EncounterFramework
 
         public static bool Prefix(Map __0, GenStepParams __1)
         {
-            var filePreset = Utils.GetPresetFor(__0.Parent, out _);
-            if (filePreset != null)
+            var preset = Utils.GetPresetFor(__0.Parent);
+            if (preset != null)
             {
                 var genStep = new GenStep_Settlement();
                 genStep.Generate(__0, __1);

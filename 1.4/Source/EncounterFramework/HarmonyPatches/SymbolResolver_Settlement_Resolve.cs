@@ -13,9 +13,8 @@ namespace EncounterFramework
         private static bool Prefix(ResolveParams rp)
         {
             Map map = BaseGen.globalSettings.map;
-            var filePreset = Utils.GetPresetFor(map.Parent, out _);
-            Log.Message("Found file: " + filePreset);
-            if (filePreset != null)
+            var preset = Utils.GetPresetFor(map.Parent);
+            if (preset != null)
             {
                 Faction faction = rp.faction ?? Find.FactionManager.RandomEnemyFaction();
                 rp.rect = rp.rect.MovedBy(map.Center - rp.rect.CenterCell);
