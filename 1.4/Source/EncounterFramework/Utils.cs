@@ -110,7 +110,6 @@ namespace EncounterFramework
         {
             map.mapDrawer.RegenerateEverythingNow();
             GenerationContext.locationData = null;
-            GenerationContext.caravanArrival = false;
             var mapComp = map.GetComponent<MapComponentGeneration>();
             mapComp.refog = true;
             try
@@ -721,7 +720,6 @@ namespace EncounterFramework
                     var lordJob = new LordJob_DefendPoint(pawn.Position, 6f);
                     LordMaker.MakeNewLord(pawn.Faction, lordJob, map, null).AddPawn(pawn);
                 }
-                GenerationContext.caravanArrival = false;
                 return locationCells;
             }
             catch (Exception ex)

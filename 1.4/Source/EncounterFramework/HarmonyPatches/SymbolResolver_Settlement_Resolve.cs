@@ -13,7 +13,9 @@ namespace EncounterFramework
         private static bool Prefix(ResolveParams rp)
         {
             Map map = BaseGen.globalSettings.map;
-            if (GenerationContext.customSettlementGeneration)
+            var filePreset = Utils.GetPresetFor(map.Parent, out _);
+            Log.Message("Found file: " + filePreset);
+            if (filePreset != null)
             {
                 Faction faction = rp.faction ?? Find.FactionManager.RandomEnemyFaction();
                 rp.rect = rp.rect.MovedBy(map.Center - rp.rect.CenterCell);
@@ -37,7 +39,6 @@ namespace EncounterFramework
                 BaseGen.symbolStack.Push("pawnGroup", resolveParams);
                 return false;
             }
-            GenerationContext.customSettlementGeneration = false;
             return true;
         }
     }

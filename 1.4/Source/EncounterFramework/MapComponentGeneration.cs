@@ -36,14 +36,19 @@ namespace EncounterFramework
         public override void MapComponentUpdate()
         {
             base.MapComponentUpdate();
-            if (this.refog && map.mapPawns.FreeColonistsSpawned.Any())
+            if (this.refog && map.mapPawns.FreeColonists.Where(x => x.PositionHeld != IntVec3.Invalid).TryRandomElement(out var colonist))
             {
                 refogCount++;
-                if (refogCount > 3)
+                //if (refogCount > 3)
                 {
                     try
                     {
-                        FloodFillerFog.DebugRefogMap(this.map);
+                        map.fogGrid.SetAllFogged();
+                        foreach (IntVec3 allCell in map.AllCells)
+                        {
+                            map.mapDrawer.MapMeshDirty(allCell, MapMeshFlag.FogOfWar);
+                        }
+                        FloodFillerFog.FloodUnfog(colonist.PositionHeld, map);
                     }
                     catch
                     {

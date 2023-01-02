@@ -73,7 +73,6 @@
     <Compile Include="Waves\Window_SelectRace.cs" />
     <Compile Include="Waves\Window_WaveDesigner.cs" />
     <Compile Include="Waves\Window_WaveDesigner_Options.cs" />
-    <Compile Include="HarmonyPatches\CaravanArrivalAction_VisitSite_Arrived_Patch.cs" />
     <Compile Include="HarmonyPatches\MapGenerator_GenerateMap_Patch.cs" />
     <Compile Include="GenerationContext.cs" />
     <Compile Include="EncounterFrameworkMod.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="LocationDef.cs" />
     <Compile Include="MapComponentGeneration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="HarmonyPatches\SettlementUtility_AttackNow_Patch.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="SettlementOptionModExtension.cs" />
   </ItemGroup>

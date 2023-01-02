@@ -18,6 +18,15 @@ namespace EncounterFramework
             {
                 Utils.DoGeneration(__result, GenerationContext.locationData, __result.ParentFaction);
             }
+            else
+            {
+                var filePreset = Utils.GetPresetFor(__result.Parent, out LocationDef locationDef);
+                if (filePreset != null)
+                {
+                    GenerationContext.locationData = new LocationData(locationDef, filePreset, __result.Parent);
+                    Utils.DoGeneration(__result, GenerationContext.locationData, __result.ParentFaction);
+                }
+            }
         }
     }
 }
