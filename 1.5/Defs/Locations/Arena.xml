@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<EncounterFramework.LocationDef>
+		<defName>DevArena</defName>
+		<filePreset>Presets/Arena.xml</filePreset>
+	</EncounterFramework.LocationDef>
+	
+</Defs>

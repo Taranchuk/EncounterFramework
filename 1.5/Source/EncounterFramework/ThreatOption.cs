@@ -148,7 +148,7 @@ namespace EncounterFramework
                 var points = manhuntPoints.RandomInRange;
                 if (ManhunterPackGenStepUtility.TryGetAnimalsKind(points, map.Tile, out var animalKind))
                 {
-                    List<Pawn> animals = ManhunterPackIncidentUtility.GenerateAnimals(animalKind, map.Tile, points);
+                    List<Pawn> animals = AggressiveAnimalIncidentUtility.GenerateAnimals(animalKind, map.Tile, points);
                     for (int i = 0; i < animals.Count; i++)
                     {
                         if (FindSpawnLoc(locationCells, map, out var spawnLoc))

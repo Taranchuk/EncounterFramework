@@ -57,6 +57,7 @@
     <Compile Include="HarmonyPatches\SymbolResolver_PawnGroup_Resolve_Patch.cs" />
     <Compile Include="ThreatGenerator.cs" />
     <Compile Include="ThreatOption.cs" />
+    <Compile Include="UI\Dialog_Rename.cs" />
     <Compile Include="Waves\Dialog_SaveWaveSettings.cs" />
     <Compile Include="Waves\Dialog_WaveSettingsList.cs" />
     <Compile Include="Waves\IOUtils.cs" />
@@ -104,10 +105,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Krafs.Rimworld.Ref">
-      <Version>1.4.3682</Version>
+      <Version>1.5.4046-beta</Version>
     </PackageReference>
     <PackageReference Include="Lib.Harmony">
-      <Version>2.2.2</Version>
+      <Version>2.3.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
